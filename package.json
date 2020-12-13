@@ -1,0 +1,25 @@
+{
+  "name": "backcompralocal",
+  "version": "1.0.0",
+  "description": "backend for the website Compralocal (an e-commerce)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon node app.js"
+  },
+  "author": "Cristopher Ramos",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.808.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "node-fetch": "^2.6.1",
+    "nodemon": "^2.0.6",
+    "request": "^2.88.2",
+    "sequelize": "^6.3.5"
+  }
+}
