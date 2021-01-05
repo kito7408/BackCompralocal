@@ -57,6 +57,12 @@ module.exports = function (app) {
         });
     });
 
+    app.get('/products/mostbuyed', (req, res) => {
+        Product.sortByBuys((err, data) => {
+            res.json(data);
+        });
+    });
+
     app.get('/products/:id', (req, res) => {
         Product.findById(req.params.id, (err, data) => {
             res.json(data);

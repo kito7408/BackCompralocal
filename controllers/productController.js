@@ -182,6 +182,25 @@ productModel.findBySearch = (searchText, callback) => {
     });
 }
 
+productModel.sortByBuys = (callback) => {
+    Product.findAll({
+        include: [{
+            model: Category,
+            as: 'category'
+        },
+        {
+            model: SubCategory,
+            as: 'subcategory'
+        },
+            Supplier],
+        order: [
+            ['numSellOnWeek', 'DESC']
+        ]
+    }).then(result => {
+        callback(null, result);
+    });
+}
+
 productModel.updateSales = async (dataProds, callback) => {
     await dataProds.forEach(element => {
         Product.findOne({
@@ -212,14 +231,7 @@ productModel.updateSales = async (dataProds, callback) => {
             as: 'subcategory'
         },
             Supplier],
-        where: {
-            name: {
-                [Op.like]: '%' + searchText + '%'
-            }
-        },
-        order: [
-            ['id', 'DESC']
-        ]
+        order: Sequelize.literal('rand()')
     }).then(result => {
         callback(null, result);
     });
