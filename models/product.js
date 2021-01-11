@@ -28,6 +28,18 @@ const Product = connection.define('product', {
 	isTrent: {
 		type: Sequelize.BOOLEAN,
 		allowNull: false
+	},
+	isOffer: {
+		type: Sequelize.BOOLEAN,
+		allowNull: false
+	},
+	priceOffer: {
+		type: Sequelize.DOUBLE,
+		allowNull: false
+	},
+	unit: {
+		type: Sequelize.STRING,
+		allowNull: false
 	}
 });
 

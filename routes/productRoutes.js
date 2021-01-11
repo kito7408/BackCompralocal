@@ -100,7 +100,10 @@ module.exports = function (app) {
                 isTrent: req.body.isTrent,
                 categoryId: req.body.categoryId,
                 subcategoryId: req.body.subcategoryId,
-                supplierId: req.body.supplierId
+                supplierId: req.body.supplierId,
+                isOffer: req.body.isOffer,
+                priceOffer: req.body.priceOffer,
+                unit: req.body.unit
             };
             Product.insert(productData, (err, data) => {
                 if (data) {
@@ -154,7 +157,10 @@ module.exports = function (app) {
             isTrent: req.body.isTrent,
             categoryId: req.body.categoryId,
             subcategoryId: req.body.subcategoryId,
-            supplierId: req.body.supplierId
+            supplierId: req.body.supplierId,
+            isOffer: req.body.isOffer,
+            priceOffer: req.body.priceOffer,
+            unit: req.body.unit
         };
 
         Product.update(productData, (err, data) => {

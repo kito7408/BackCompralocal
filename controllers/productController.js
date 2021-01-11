@@ -35,7 +35,10 @@ productModel.insert = (data, callback) => {
         isTrent: data.isTrent,
         categoryId: data.categoryId,
         subcategoryId: data.subcategoryId,
-        supplierId: data.supplierId
+        supplierId: data.supplierId,
+        isOffer: data.isOffer,
+        priceOffer: data.priceOffer,
+        unit: data.unit
     }).then(result => {
         callback(null, result.get());
     });
@@ -56,6 +59,9 @@ productModel.update = (data, callback) => {
         obj.categoryId = data.categoryId;
         obj.subCategoryId = data.subCategoryId;
         obj.supplierId = data.supplierId;
+        obj.isOffer = data.isOffer;
+        obj.priceOffer = data.priceOffer;
+        obj.unit = data.unit;
         obj.save().then(result => callback(null, result.get()));
     });
 };
