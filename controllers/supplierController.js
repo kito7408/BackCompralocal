@@ -11,7 +11,10 @@ supplierModel.getAll = (callback) => {
 
 supplierModel.insert = (data, callback) => {
     Supplier.create({
-        name: data.name
+        name: data.name,
+        image: data.image,
+        bank: data.bank,
+        account_number: data.account_number
     }).then(result => {
         callback(null, result.get());
     });
@@ -24,6 +27,9 @@ supplierModel.update = (data, callback) => {
         }
     }).then(obj => {
         obj.name = data.name;
+        obj.image = data.image;
+        obj.bank = data.bank;
+        obj.account_number = data.account_number;
         obj.save().then(result => callback(null, result.get()));
     });
 };

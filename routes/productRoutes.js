@@ -77,7 +77,7 @@ module.exports = function (app) {
         const filename = date + req.file.originalname;
 
         var params = {
-            Bucket: 'compralocal-s3-product-images',
+            Bucket: 'compralocal-images/products',
             Key: filename,
             Body: req.file.buffer
         }

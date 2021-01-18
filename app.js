@@ -4,7 +4,9 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
-app.set('port',process.env.PORT || 3000);
+const port = process.env.PORT || 3000;
+
+app.set('port', port);
 
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'))
@@ -35,5 +37,5 @@ require('./routes/supplierRoutes')(app);
 
 
 app.listen(app.get('port'), () => {
-	console.log('server on port 3000');
+	console.log('server on port ' + port);
 });
