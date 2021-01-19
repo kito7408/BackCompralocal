@@ -32,7 +32,7 @@ require('./routes/categoryRoutes')(app);
 require('./routes/subCategoryRoutes')(app);
 require('./routes/productRoutes')(app);
 require('./routes/cartRoutes')(app);
-require('./routes/noticeRoutes')(app);
+require('./routes/postRoutes')(app);
 require('./routes/supplierRoutes')(app);
 
 

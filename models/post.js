@@ -2,7 +2,7 @@ var Sequelize = require('sequelize');
 var connection = require('../connection');
 var User = require('./user');
 
-const Notice = connection.define('notice', {
+const Post = connection.define('post', {
 	title: {
 		type: Sequelize.TEXT,
 		allowNull: false
@@ -17,10 +17,10 @@ const Notice = connection.define('notice', {
 	}
 });
 
-Notice.belongsTo(User, {
+Post.belongsTo(User, {
 	foreignKey: {
 		allowNull: false
 	}
 });
 
-module.exports = Notice;
+module.exports = Post;

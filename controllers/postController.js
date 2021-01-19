@@ -1,10 +1,10 @@
 const User = require('../models/user');
-const Notice = require('../models/notice')
+const Post = require('../models/post')
 
-let noticeModel = {};
+let postModel = {};
 
-noticeModel.getAll = (callback) => {
-    Notice.findAll({
+postModel.getAll = (callback) => {
+    Post.findAll({
         include: [User]
     }).then(data => {
         callback(null, data);
@@ -12,16 +12,17 @@ noticeModel.getAll = (callback) => {
 };
 
 
-noticeModel.insert = (data, callback) => {
-    Notice.create({
+postModel.insert = (data, callback) => {
+    Post.create({
         title: data.title,
         content: data.content,
-        image: data.image
+        image: data.image,
+        userId: data.userId
     }).then(result => callback(null, result.get()));
 };
 
-noticeModel.update = (data, callback) => {
-    Notice.findOne({
+postModel.update = (data, callback) => {
+    Post.findOne({
         where: {
             id: data.id
         }
@@ -29,12 +30,13 @@ noticeModel.update = (data, callback) => {
         obj.title = data.title;
         obj.content = data.content;
         obj.image = data.image;
+        obj.userId = data.userId;
         obj.save().then(result => callback(null, result.get()));
     });
 };
 
-noticeModel.delete = (id, callback) => {
-    Notice.findOne({
+postModel.delete = (id, callback) => {
+    Post.findOne({
         where: {
             id: id
         }
@@ -43,8 +45,8 @@ noticeModel.delete = (id, callback) => {
     });
 };
 
-noticeModel.findById = (id, callback) => {
-    Notice.findOne({
+postModel.findById = (id, callback) => {
+    Post.findOne({
         where: {
             id: id
         },
@@ -54,8 +56,8 @@ noticeModel.findById = (id, callback) => {
     });
 }
 
-noticeModel.findByUser = (id, callback) => {
-    Notice.findAll({
+postModel.findByUser = (id, callback) => {
+    Post.findAll({
         where: {
             userId: id
         },
@@ -65,4 +67,4 @@ noticeModel.findByUser = (id, callback) => {
     });
 }
 
-module.exports = noticeModel;
+module.exports = postModel;
