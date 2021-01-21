@@ -22,21 +22,27 @@ module.exports = function (app) {
         });
     });
 
-    app.get('/post/:id', (req, res) => {
-        Post.findById(req.params.id, (err, data) => {
-            res.json(data);
-        })
-    });
-
     app.get('/post/user/:id', (req, res) => {
         Post.findByUser(req.params.id, (err, data) => {
             res.json(data);
         });
     });
 
+    app.get('/post/last', (req, res) => {
+        Post.findLast((err, data) => {
+            res.json(data);
+        });
+    });
+
+    app.get('/post/:id', (req, res) => {
+        Post.findById(req.params.id, (err, data) => {
+            res.json(data);
+        })
+    });
+
     app.post('/post', upload.single('image'), (req, res) => {
 
-        console.log(req.body);
+        // console.log(req.body);
         const now = new Date().toISOString();
         const date = now.replace(/:/g, '-');
         const filename = date + req.file.originalname;

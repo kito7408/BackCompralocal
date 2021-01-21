@@ -5,7 +5,10 @@ let postModel = {};
 
 postModel.getAll = (callback) => {
     Post.findAll({
-        include: [User]
+        include: [User],
+        order: [
+            ['id', 'DESC']
+        ]
     }).then(data => {
         callback(null, data);
     });
@@ -64,6 +67,16 @@ postModel.findByUser = (id, callback) => {
         include: [User]
     }).then(result => {
         callback(null, result);
+    });
+}
+
+postModel.findLast = (callback) => {
+    Post.findAll({
+        limit: 1,
+        include: [User],
+        order: [['id', 'DESC']]
+    }).then(result => {
+        callback(null, result[0]);
     });
 }
 

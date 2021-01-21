@@ -34,6 +34,7 @@ require('./routes/productRoutes')(app);
 require('./routes/cartRoutes')(app);
 require('./routes/postRoutes')(app);
 require('./routes/supplierRoutes')(app);
+require('./routes/orderRoutes')(app);
 
 
 app.listen(app.get('port'), () => {

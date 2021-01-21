@@ -20,13 +20,26 @@ module.exports = function (app) {
         });
     });
 
+    app.get('/cart/order/:id', (req, res) => {
+        Cart.findByOrder(req.params.id, (err, data) => {
+            res.json(data);
+        });
+    });
+
+    app.get('/cart/order', (req, res) => {
+        Cart.findWhereIsInAnyOrder((err, data) => {
+            res.json(data);
+        });
+    });
+
     app.post('/cart', (req, res) => {
         const cartData = {
             quantity: req.body.quantity,
             totalPrice: req.body.totalPrice,
             isBuyed: req.body.isBuyed,
             userId: req.body.userId,
-            productId: req.body.productId
+            productId: req.body.productId,
+            orderId: req.body.orderId
         };
 
         Cart.insert(cartData, (err, data) => {
@@ -75,7 +88,8 @@ module.exports = function (app) {
             totalPrice: req.body.totalPrice,
             isBuyed: req.body.isBuyed,
             userId: req.body.userId,
-            productId: req.body.productId
+            productId: req.body.productId,
+            orderId: req.body.orderId
         };
 
         Cart.update(cartData, (err, data) => {
@@ -139,8 +153,8 @@ module.exports = function (app) {
     });
 
     app.post('/cart/userbuy', (req, res) => {
-        console.log(req.body);
-        Cart.clearCart(req.body.userId,(err, data)=> {
+        // console.log(req.body);
+        Cart.buyCart(req.body.userId, req.body.orderId,(err, data)=> {
             // console.log(data);
             if (data) {
                 res.json({

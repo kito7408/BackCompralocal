@@ -1,14 +1,11 @@
 var Sequelize = require('sequelize');
 var connection = require('../connection');
 const Cart = require('./cart');
+const OrderState = require('./orderState');
 const User = require('./user');
 
 const Order = connection.define('order', {
 	num: {
-		type: Sequelize.STRING,
-		allowNull: false
-	},
-	state: {
 		type: Sequelize.STRING,
 		allowNull: false
 	},
@@ -23,6 +20,12 @@ Order.belongsTo(User, {
 		allowNull: false
 	}
 });
+
+// Order.belongsTo(OrderState, {
+// 	foreignKey: {
+// 		allowNull: false
+// 	}
+// });
 
 Order.hasMany(Cart);
 

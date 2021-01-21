@@ -1,7 +1,9 @@
 const Product = require('../models/product');
 const User = require('../models/user');
 const Cart = require('../models/cart');
-const fetch = require('node-fetch')
+const fetch = require('node-fetch');
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
 
 const privatekey = 'sk_test_f781878eda2badcd';
 let cartModel = {};
@@ -35,7 +37,8 @@ cartModel.insert = (data, callback) => {
                 totalPrice: data.totalPrice,
                 isBuyed: data.isBuyed,
                 userId: data.userId,
-                productId: data.productId
+                productId: data.productId,
+                orderId: data.orderId
             }).then(result => {
                 callback(null, result.get());
             });
@@ -54,6 +57,7 @@ cartModel.update = (data, callback) => {
         obj.isBuyed = data.isBuyed;
         obj.userId = data.userId;
         obj.productId = data.productId;
+        obj.orderId = data.orderId;
         obj.save().then(result => callback(null, result.get()));
     });
 };
@@ -91,8 +95,32 @@ cartModel.findByUser = (id, callback) => {
     });
 }
 
+cartModel.findWhereIsInAnyOrder = (callback) => {
+    Cart.findAll({
+        where: {
+            orderId: {
+                [Op.notLike]: null
+            }
+        },
+        include: [Product, User]
+    }).then(result => {
+        callback(null, result);
+    });
+}
+
+cartModel.findByOrder = (id, callback) => {
+    Cart.findAll({
+        where: {
+            orderId: id
+        },
+        include: [Product, User]
+    }).then(result => {
+        callback(null, result);
+    });
+}
+
 cartModel.saveMany = async (cartArray, callback) => {
-    console.log("prods", cartArray);
+    // console.log("prods", cartArray);
     cartNoRepeat = [];
     await cartArray.forEach(element => {
 
@@ -103,19 +131,18 @@ cartModel.saveMany = async (cartArray, callback) => {
                 isBuyed: false
             }
         }).then(obj => {
-            console.log("fond", obj);
+            // console.log("fond", obj);
             if (obj) {
                 obj.quantity += element.quantity;
                 obj.totalPrice += element.totalPrice;
                 obj.save();
             } else {
-                console.log("llega1");
                 cartNoRepeat.push(element);
             }
         });
 
     });
-    console.log("norepeat", cartNoRepeat);
+
     if (cartNoRepeat.length > 0) {
         Cart.bulkCreate(cartNoRepeat).then(() => {
             Cart.findAll({
@@ -141,7 +168,7 @@ cartModel.saveMany = async (cartArray, callback) => {
     }
 }
 
-cartModel.clearCart = (user_id, callback) => {  //convierte todos los items en el carrito de un usuario (que esten con isBuyed = false) en isBuyed = true
+cartModel.buyCart = (user_id, order_id, callback) => {  //convierte todos los items en el carrito de un usuario (que esten con isBuyed = false) en isBuyed = true, tambien se le asigna una orden
     Cart.findAll({
         where: {
             userId: user_id,
@@ -150,6 +177,7 @@ cartModel.clearCart = (user_id, callback) => {  //convierte todos los items en e
     }).then(cartList => {
         cartList.forEach(item => {
             item.isBuyed = true;
+            item.orderId = order_id;
             item.save();
         });
 
