@@ -51,11 +51,17 @@ module.exports = function (app) {
     
             const suppData = {
                 name: req.body.name,
-                bank: req.body.bank,
+                business_name: req.body.business_name,
+                ruc: req.body.ruc,
                 image: filename,
+                description: req.body.description,
+                bank: req.body.bank,
                 account_number: req.body.account_number,
                 email: req.body.email,
-                contact_person: req.body.contact_person
+                contact_person: req.body.contact_person,
+                dni_contact: req.body.dni_contact,
+                phone_contact: req.body.phone_contact,
+                fiscal_address: req.body.fiscal_address
             };
 
             Supplier.insert(suppData, (err, data) => {
@@ -80,11 +86,17 @@ module.exports = function (app) {
 
         const suppData = {
             name: req.body.name,
-            bank: req.body.bank,
+            business_name: req.body.business_name,
+            ruc: req.body.ruc,
             image: req.file.path,
+            description: req.body.description,
+            bank: req.body.bank,
             account_number: req.body.account_number,
             email: req.body.email,
-            contact_person: req.body.contact_person
+            contact_person: req.body.contact_person,
+            dni_contact: req.body.dni_contact,
+            phone_contact: req.body.phone_contact,
+            fiscal_address: req.body.fiscal_address
         };
 
         Supplier.update(suppData, (err, data) => {
