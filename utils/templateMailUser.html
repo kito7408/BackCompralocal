@@ -1,0 +1,81 @@
+<head>
+    <style>
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+    }
+    table {
+        border-collapse: collapse;
+    }
+    .table .thead-light th {
+        color: #495057;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+    .table-bordered thead td, .table-bordered thead th {
+        border-bottom-width: 2px;
+    }
+    .table thead th {
+        vertical-align: bottom;
+        border-bottom: 2px solid #dee2e6;
+    }
+    .table-bordered td, .table-bordered th {
+        border: 1px solid #dee2e6;
+    }
+    .table td, .table th {
+        padding: .75rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+    }
+    th {
+        text-align: inherit;
+        text-align: -webkit-match-parent;
+    }
+    .align-middle {
+        vertical-align: middle!important;
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif !important;
+    }
+    </style>
+</head>
+<body>
+    <h1>Hola {{user.name}}</h1>
+    <h2>Orden #{{num}}</h2>
+    <p>Fecha de la orden: {{date}}</p>
+    <p>Precio total de la orden: {{totalPrice}}</p>
+    <p>El proyecto al que apoya esta compra es <b>{{helpproyect.name}}</b></p>
+    <hr>
+    <h5>Detalle de la orden.</h5>
+    <table class="table table-hover table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Producto</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+            {{#each carts}}
+            <tr>
+                <td class="align-middle">{{quantity}}</td>
+                <td class="align-middle">
+                {{product.name}}
+                </td>
+                <td class="align-middle">{{product.price}}</td>
+                <td class="align-middle">{{totalPrice}}</td>
+            </tr>
+            {{/each}}
+            <tr>
+                <th scope="row" colspan="3">Subtotal</th>
+                <th>{{totalPrice}}</th>
+            </tr>
+        </tbody>
+    </table>
+    </body>

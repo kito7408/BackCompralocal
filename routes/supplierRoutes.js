@@ -29,7 +29,7 @@ module.exports = function (app) {
     });
 
     app.post('/suppliers', upload.single('image'), (req, res) => {
-        
+        console.log(req.body);
         const now = new Date().toISOString();
         const date = now.replace(/:/g, '-');
         const filename = date + req.file.originalname;
@@ -53,7 +53,9 @@ module.exports = function (app) {
                 name: req.body.name,
                 bank: req.body.bank,
                 image: filename,
-                account_number: req.body.account_number
+                account_number: req.body.account_number,
+                email: req.body.email,
+                contact_person: req.body.contact_person
             };
 
             Supplier.insert(suppData, (err, data) => {
@@ -80,7 +82,9 @@ module.exports = function (app) {
             name: req.body.name,
             bank: req.body.bank,
             image: req.file.path,
-            account_number: req.body.account_number
+            account_number: req.body.account_number,
+            email: req.body.email,
+            contact_person: req.body.contact_person
         };
 
         Supplier.update(suppData, (err, data) => {

@@ -1,0 +1,9 @@
+{
+    "Source":"Admin Compralocal <admin@compralocal.pe>",
+    "Template": "MyTemplate",
+    "Destination": {
+      "ToAddresses": [ "Cristopher.lizandro.11@gmail.com"
+      ]
+    },
+    "TemplateData": "{ \"name\":\"Alejandro\", \"favoriteanimal\": \"123123\" }"
+  }

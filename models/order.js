@@ -3,6 +3,7 @@ var connection = require('../connection');
 const Cart = require('./cart');
 const OrderState = require('./orderState');
 const User = require('./user');
+const HelpProyect = require('./helpProyect');
 
 const Order = connection.define('order', {
 	num: {
@@ -20,6 +21,12 @@ Order.belongsTo(User, {
 		allowNull: false
 	}
 });
+
+Order.belongsTo(HelpProyect, {
+	foreignKey: {
+		allowNull: false
+	}
+})
 
 // Order.belongsTo(OrderState, {
 // 	foreignKey: {

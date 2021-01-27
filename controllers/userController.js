@@ -1,9 +1,12 @@
 const User = require('../models/user');
+const UserType = require('../models/userType');
 
 let userModel = {};
 
 userModel.getAll = (callback) => {
-    User.findAll().then(users => {
+    User.findAll({
+        include: [UserType]
+    }).then(users => {
         callback(null, users);
     });
 };
@@ -48,7 +51,8 @@ userModel.findById = (id, callback) => {
     User.findOne({
         where: {
             id: id
-        }
+        },
+        include: [UserType]
     }).then(result => {
         callback(null, result);
     });
@@ -59,7 +63,8 @@ userModel.findByUsername = (username, callback) => {
     User.findOne({
         where: {
             username: username
-        }
+        },
+        include: [UserType]
     }).then(result => {
         callback(null, result);
     });
@@ -70,7 +75,8 @@ userModel.login = (userData, callback) => {
         where:{
             username: userData.username,
             password: userData.password
-        }
+        },
+        include: [UserType]
     }).then(result => {
         callback(null, result);
     });

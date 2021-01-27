@@ -18,6 +18,14 @@ const Supplier = connection.define('supplier', {
 	account_number: {
 		type: Sequelize.STRING,
 		allowNull: false
+	},
+	email: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
+	contact_person: {
+		type: Sequelize.STRING,
+		allowNull: false
 	}
 });
 

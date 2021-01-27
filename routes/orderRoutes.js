@@ -2,6 +2,18 @@ const Order = require('../controllers/orderController');
 
 module.exports = function (app) {
 
+    app.put('/order/sendUserMail', (req,res) => {
+        Order.sendUserMail(req.body, (err, data) => {
+            res.json(data);
+        });
+    });
+    
+    app.put('/order/sendAdminMail', (req,res) => {
+        Order.sendAdminMail(req.body, (err, data) => {
+            res.json(data);
+        });
+    });
+
     app.get('/order', (req, res) => {
         Order.getAll((err, data) => {
             res.json(data);
@@ -24,7 +36,8 @@ module.exports = function (app) {
         const orderData = {
             num: req.body.num,
             totalPrice: req.body.totalPrice,
-            userId: req.body.userId
+            userId: req.body.userId,
+            helpProyectId: req.body.helpProyectId
         };
 
         Order.insert(orderData, (err, data) => {
@@ -48,7 +61,8 @@ module.exports = function (app) {
         const orderData = {
             num: req.body.num,
             totalPrice: req.body.totalPrice,
-            userId: req.body.userId
+            userId: req.body.userId,
+            helpProyectId: req.body.helpProyectId
         };
 
         Order.update(orderData, (err, data) => {
