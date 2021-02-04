@@ -1,81 +1,168 @@
 <head>
     <style>
-    .table-bordered {
-        border: 1px solid #dee2e6;
-    }
-    .table {
-        width: 100%;
-        margin-bottom: 1rem;
-        color: #212529;
-    }
-    table {
-        border-collapse: collapse;
-    }
-    .table .thead-light th {
-        color: #495057;
-        background-color: #e9ecef;
-        border-color: #dee2e6;
-    }
-    .table-bordered thead td, .table-bordered thead th {
-        border-bottom-width: 2px;
-    }
-    .table thead th {
-        vertical-align: bottom;
-        border-bottom: 2px solid #dee2e6;
-    }
-    .table-bordered td, .table-bordered th {
-        border: 1px solid #dee2e6;
-    }
-    .table td, .table th {
-        padding: .75rem;
-        vertical-align: top;
-        border-top: 1px solid #dee2e6;
-    }
-    th {
-        text-align: inherit;
-        text-align: -webkit-match-parent;
-    }
-    .align-middle {
-        vertical-align: middle!important;
-    }
+        .table-bordered {
+            border: 1px solid #dee2e6;
+        }
 
-    body {
-        font-family: 'Montserrat', sans-serif !important;
-    }
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        .table .thead-light th {
+            color: #495057;
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+        }
+
+        .table-bordered thead td,
+        .table-bordered thead th {
+            border-bottom-width: 2px;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table-bordered td,
+        .table-bordered th {
+            border: 1px solid #dee2e6;
+        }
+
+        .table td,
+        .table th {
+            padding: .75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        th {
+            text-align: inherit;
+            text-align: -webkit-match-parent;
+        }
+
+        .align-middle {
+            vertical-align: middle !important;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif !important;
+        }
+
+        @media (min-width: 576px) {
+
+            .container,
+            .container-sm {
+                max-width: 540px;
+            }
+        }
+
+        @media (min-width: 768px) {
+
+            .container,
+            .container-md,
+            .container-sm {
+                max-width: 720px;
+            }
+        }
+
+        @media (min-width: 992px) {
+
+            .container,
+            .container-lg,
+            .container-md,
+            .container-sm {
+                max-width: 960px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+
+            .container,
+            .container-lg,
+            .container-md,
+            .container-sm,
+            .container-xl {
+                max-width: 1140px;
+            }
+        }
+
+        .container,
+        .container-fluid,
+        .container-lg,
+        .container-md,
+        .container-sm,
+        .container-xl {
+            width: 100%;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .img-logo {
+            width: 100%;
+            border-bottom: solid 4px black;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
+
 <body>
-    <h1>Hola {{user.name}}</h1>
-    <h2>Orden #{{num}}</h2>
-    <p>Fecha de la orden: {{date}}</p>
-    <p>Precio total de la orden: {{totalPrice}}</p>
-    <p>El proyecto al que apoya esta compra es <b>{{helpproyect.name}}</b></p>
-    <hr>
-    <h5>Detalle de la orden.</h5>
-    <table class="table table-hover table-bordered">
-        <thead class="thead-light">
-        <tr>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Producto</th>
-            <th scope="col">Precio</th>
-            <th scope="col">Subtotal</th>
-        </tr>
-        </thead>
-        <tbody>
-            {{#each carts}}
-            <tr>
-                <td class="align-middle">{{quantity}}</td>
-                <td class="align-middle">
-                {{product.name}}
-                </td>
-                <td class="align-middle">{{product.price}}</td>
-                <td class="align-middle">{{totalPrice}}</td>
-            </tr>
-            {{/each}}
-            <tr>
-                <th scope="row" colspan="3">Subtotal</th>
-                <th>{{totalPrice}}</th>
-            </tr>
-        </tbody>
-    </table>
-    </body>
+    <div class="container">
+        <a href="https://compralocal.pe/">
+            <img src="https://compralocal.pe/assets/imgs/logo_before.png" alt="CompraLocal" class="img-logo">
+        </a>
+        <h1>Hola {{user.name}}</h1>
+        <h2>Orden #{{num}}</h2>
+        <p>Fecha de la orden: <b>{{date}}</b></p>
+        <p>Precio total de la orden: <b>{{totalPrice}}</b></p>
+        <p>Método de pago: <b>{{paymentMethod}}</b></p>
+        <p>Método de envío: <b>{{deliveryMethod}}</b></p>
+        <p>El proyecto al que apoya esta compra es <b>{{helpproyect.name}}</b></p>
+        <p>Cupón: {{cupon}}</p>
+        <p>Comentario: {{coment}}</p>
+        <hr>
+        <h5>Detalle de la orden.</h5>
+        <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each carts}}
+                <tr>
+                    <td class="align-middle">{{quantity}}</td>
+                    <td class="align-middle">
+                        {{product.name}}
+                    </td>
+                    <td class="align-middle">{{product.price}}</td>
+                    <td class="align-middle">{{totalPrice}}</td>
+                </tr>
+                {{/each}}
+                <tr>
+                    <th scope="row" colspan="3">Total Productos</th>
+                    <th>{{productsPrice}}</th>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="3">Total Envío</th>
+                    <th>{{deliveryPrice}}</th>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="3">Importe total de la compra</th>
+                    <th>{{totalPrice}}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
