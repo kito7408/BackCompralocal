@@ -35,7 +35,13 @@ module.exports = function (app) {
     app.post('/order', (req, res) => {
         const orderData = {
             num: req.body.num,
+            deliveryMethod: req.body.deliveryMethod,
+            paymentMethod: req.body.paymentMethod,
+            productsPrice: req.body.productsPrice,
+            deliveryPrice: req.body.deliveryPrice,
             totalPrice: req.body.totalPrice,
+            cupon: req.body.cupon,
+            coment: req.body.coment,
             userId: req.body.userId,
             helpProyectId: req.body.helpProyectId
         };
@@ -60,7 +66,13 @@ module.exports = function (app) {
     app.put('/order/:id', (req, res) => {
         const orderData = {
             num: req.body.num,
+            deliveryMethod: req.body.deliveryMethod,
+            paymentMethod: req.body.paymentMethod,
+            productsPrice: req.body.productsPrice,
+            deliveryPrice: req.body.deliveryPrice,
             totalPrice: req.body.totalPrice,
+            cupon: req.body.cupon,
+            coment: req.body.coment,
             userId: req.body.userId,
             helpProyectId: req.body.helpProyectId
         };

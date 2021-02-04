@@ -8,9 +8,8 @@ module.exports = function (app) {
         });
     });
     
-    app.get('/users/username', (req, res) => {
-        console.log("adsadadas");
-        User.findByUsername(req.query.username, (err, data) => {
+    app.get('/users/email', (req, res) => {
+        User.findByEmail(req.query.email, (err, data) => {
             res.json(data);
         });
     });
@@ -24,8 +23,17 @@ module.exports = function (app) {
     app.post('/users', (req, res) => {
         const userData = {
             name: req.body.name,
-            username: req.body.username,
+            last_name: req.body.last_name,
+            email: req.body.email,
             password: req.body.password,
+            docType: req.body.docType,
+            docNum: req.body.docNum,
+            direccion: req.body.direccion,
+            provincia: req.body.provincia,
+            distrito: req.body.distrito,
+            ciudad: req.body.ciudad,
+            phoneFijo: req.body.phoneFijo,
+            phoneMovil: req.body.phoneMovil,
             userTypeId: req.body.userTypeId
         };
 
@@ -50,8 +58,17 @@ module.exports = function (app) {
 
         const userData = {
             name: req.body.name,
-            username: req.body.username,
+            last_name: req.body.last_name,
+            email: req.body.email,
             password: req.body.password,
+            docType: req.body.docType,
+            docNum: req.body.docNum,
+            direccion: req.body.direccion,
+            provincia: req.body.provincia,
+            distrito: req.body.distrito,
+            ciudad: req.body.ciudad,
+            phoneFijo: req.body.phoneFijo,
+            phoneMovil: req.body.phoneMovil,
             userTypeId: req.body.userTypeId
         };
 
@@ -91,7 +108,7 @@ module.exports = function (app) {
 
     app.post('/users/login', (req, res) => {
         const userData = {
-            username: req.body.username,
+            email: req.body.email,
             password: req.body.password
         };
 

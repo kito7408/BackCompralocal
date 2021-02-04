@@ -10,9 +10,33 @@ const Order = connection.define('order', {
 		type: Sequelize.STRING,
 		allowNull: false
 	},
+	deliveryMethod: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
+	paymentMethod: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
+	productsPrice: {
+		type: Sequelize.DOUBLE,
+		allowNull: false
+	},
+	deliveryPrice: {
+		type: Sequelize.DOUBLE,
+		allowNull: false
+	},
 	totalPrice: {
 		type: Sequelize.DOUBLE,
 		allowNull: false
+	},
+	cupon: {
+		type: Sequelize.STRING,
+		allowNull: true
+	},
+	coment: {
+		type: Sequelize.STRING,
+		allowNull: true
 	}
 });
 

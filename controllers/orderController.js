@@ -78,10 +78,16 @@ orderModel.getAll = (callback) => {
 };
 
 orderModel.insert = (data, callback) => {
-    console.log("ord",data);
+    // console.log("ord",data);
     Order.create({
         num: data.num,
+        deliveryMethod: data.deliveryMethod,
+        paymentMethod: data.paymentMethod,
+        productsPrice: data.productsPrice,
+        deliveryPrice: data.deliveryPrice,
         totalPrice: data.totalPrice,
+        cupon: data.cupon,
+        coment: data.coment,
         userId: data.userId,
         helpproyectId: data.helpProyectId
     }).then(result => {
@@ -96,7 +102,13 @@ orderModel.update = (data, callback) => {
         }
     }).then(obj => {
         obj.num = data.num;
+        obj.deliveryMethod = data.deliveryMethod;
+        obj.paymentMethod = data.paymentMethod;
+        obj.productsPrice = data.productsPrice;
+        obj.deliveryPrice = data.deliveryPrice;
         obj.totalPrice = data.totalPrice;
+        obj.cupon = data.cupon;
+        obj.coment = data.coment;
         obj.userId = data.userId;
         obj.helpproyectId = data.helpProyectId;
         obj.save().then(result => callback(null, result.get()));
@@ -148,26 +160,25 @@ orderModel.findByUser = (id, callback) => {
 }
 
 orderModel.sendUserMail = async (data, callback) => {
-    console.log("dataUser", data);
+    // console.log("dataUser", data);
     data.template = "CLMailUserTemplate";
-    data.sendMail = data.user.username;
+    data.sendMail = data.user.email;
     sendTemplateEmail(data).then(res => {
         callback(null, res);
     });
 }
 
 orderModel.sendAdminMail = async (data, callback) => {
-    console.log("dataAdmin", data);
+    // console.log("dataAdmin", data);
     data.template = "CLMailAdminTemplate";
     data.sendMail = "admin@compralocal.pe";
 
     data.carts.forEach(element => {
-        element.supplierPrice = element.totalPrice * 0.93;
-        element.supplierPrice = Math.round((element.supplierPrice + Number.EPSILON) * 100) / 100;
         element.helpProyPrice = element.totalPrice * 0.01;
         element.helpProyPrice = Math.round((element.helpProyPrice + Number.EPSILON) * 100) / 100;
         element.culqiPrice = element.totalPrice * 0.06;
         element.culqiPrice = Math.round((element.culqiPrice + Number.EPSILON) * 100) / 100;
+        element.supplierPrice = element.totalPrice - (element.helpProyPrice + element.culqiPrice);  //93%
     });
 
     sendTemplateEmail(data).then(res => {

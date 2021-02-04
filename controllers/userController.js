@@ -15,8 +15,17 @@ userModel.getAll = (callback) => {
 userModel.insert = (data, callback) => {
     User.create({
         name: data.name,
-        username: data.username,
+        last_name: data.last_name,
+        email: data.email,
         password: data.password,
+        docType: data.docType,
+        docNum: data.docNum,
+        direccion: data.direccion,
+        provincia: data.provincia,
+        distrito: data.distrito,
+        ciudad: data.ciudad,
+        phoneFijo: data.phoneFijo,
+        phoneMovil: data.phoneMovil,
         userTypeId: data.userTypeId
     }).then(result => {
         callback(null, result.get());
@@ -30,8 +39,17 @@ userModel.update = (data, callback) => {
         }
     }).then(obj => {
         obj.name = data.name;
-        obj.username = data.username;
+        obj.last_name = data.last_name;
+        obj.email = data.email;
         obj.password = data.password;
+        obj.docType = data.docType;
+        obj.docNum = data.docNum;
+        obj.direccion = data.direccion;
+        obj.provincia = data.provincia;
+        obj.distrito = data.distrito
+        obj.ciudad = data.ciudad;
+        obj.phoneFijo = data.phoneFijo;
+        obj.phoneMovil = data.phoneMovil;
         obj.userTypeId = data.userTypeId;
         obj.save().then(result => callback(null, result.get()));
     });
@@ -58,11 +76,10 @@ userModel.findById = (id, callback) => {
     });
 }
 
-userModel.findByUsername = (username, callback) => {
-    console.log(username);
+userModel.findByEmail = (email, callback) => {
     User.findOne({
         where: {
-            username: username
+            email: email
         },
         include: [UserType]
     }).then(result => {
@@ -73,7 +90,7 @@ userModel.findByUsername = (username, callback) => {
 userModel.login = (userData, callback) => {
     User.findOne({
         where:{
-            username: userData.username,
+            email: userData.email,
             password: userData.password
         },
         include: [UserType]

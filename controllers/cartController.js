@@ -120,31 +120,43 @@ cartModel.findByOrder = (id, callback) => {
 }
 
 cartModel.saveMany = async (cartArray, callback) => {
-    // console.log("prods", cartArray);
     cartNoRepeat = [];
-    await cartArray.forEach(element => {
 
-        Cart.findOne({
-            where: {
-                userId: element.userId,
-                productId: element.productId,
-                isBuyed: false
-            }
-        }).then(obj => {
-            // console.log("fond", obj);
-            if (obj) {
-                obj.quantity += element.quantity;
-                obj.totalPrice += element.totalPrice;
-                obj.save();
-            } else {
-                cartNoRepeat.push(element);
-            }
+    var bar = new Promise((resolve, reject) => {
+        cartArray.forEach((element, index, array) => {
+            Cart.findOne({
+                where: {
+                    userId: element.userId,
+                    productId: element.productId,
+                    isBuyed: false
+                }
+            }).then(obj => {
+                if (obj) {
+                    obj.quantity += element.quantity;
+                    obj.totalPrice += element.totalPrice;
+                    obj.save();
+                } else {
+                    cartNoRepeat.push(element);
+                }
+                if (index === array.length -1) resolve();
+            });
         });
-
     });
-
-    if (cartNoRepeat.length > 0) {
-        Cart.bulkCreate(cartNoRepeat).then(() => {
+    
+    bar.then(() => {
+        if (cartNoRepeat.length > 0) {
+            Cart.bulkCreate(cartNoRepeat).then(() => {
+                Cart.findAll({
+                    where: {
+                        userId: cartArray[0].userId,
+                        isBuyed: false
+                    },
+                    include: [Product, User]
+                }).then(result => {
+                    callback(null, result);
+                });
+            });
+        } else {
             Cart.findAll({
                 where: {
                     userId: cartArray[0].userId,
@@ -154,18 +166,55 @@ cartModel.saveMany = async (cartArray, callback) => {
             }).then(result => {
                 callback(null, result);
             });
-        });
-    } else {
-        Cart.findAll({
-            where: {
-                userId: cartArray[0].userId,
-                isBuyed: false
-            },
-            include: [Product, User]
-        }).then(result => {
-            callback(null, result);
-        });
-    }
+        }
+    });
+
+    // await cartArray.forEach(async (element) => {
+
+    //     await Cart.findOne({
+    //         where: {
+    //             userId: element.userId,
+    //             productId: element.productId,
+    //             isBuyed: false
+    //         }
+    //     }).then(obj => {
+    //         console.log("fond", obj);
+    //         if (obj) {
+    //             obj.quantity += element.quantity;
+    //             obj.totalPrice += element.totalPrice;
+    //             obj.save();
+    //         } else {
+    //             cartNoRepeat.push(element);
+    //         }
+    //     });
+    //     console.log("counting");
+    // });
+    // console.log(cartNoRepeat);
+    // if (cartNoRepeat.length > 0) {
+    //     console.log('crea varios');
+    //     Cart.bulkCreate(cartNoRepeat).then(() => {
+    //         Cart.findAll({
+    //             where: {
+    //                 userId: cartArray[0].userId,
+    //                 isBuyed: false
+    //             },
+    //             include: [Product, User]
+    //         }).then(result => {
+    //             callback(null, result);
+    //         });
+    //     });
+    // } else {
+    //     console.log('no crea varios');
+    //     Cart.findAll({
+    //         where: {
+    //             userId: cartArray[0].userId,
+    //             isBuyed: false
+    //         },
+    //         include: [Product, User]
+    //     }).then(result => {
+    //         callback(null, result);
+    //     });
+    // }
 }
 
 cartModel.buyCart = (user_id, order_id, callback) => {  //convierte todos los items en el carrito de un usuario (que esten con isBuyed = false) en isBuyed = true, tambien se le asigna una orden
