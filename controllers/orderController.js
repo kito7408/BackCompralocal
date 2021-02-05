@@ -46,6 +46,14 @@ let sendEmail = (recipientEmail, name) => {
 
 let sendTemplateEmail = (data) => {
     // console.log(sendTemplateEmail("Cristopher.lizandro.11@gmail.com"));
+
+    if (!data.cupon) {
+        data.cupon = '';
+    }
+    if (!data.coment) {
+        data.coment = '';
+    }
+
     let params = {
         Source: 'Admin Compralocal <admin@compralocal.pe>',
         Template: data.template,
@@ -83,6 +91,7 @@ orderModel.insert = (data, callback) => {
         num: data.num,
         deliveryMethod: data.deliveryMethod,
         paymentMethod: data.paymentMethod,
+        paymentState: data.paymentState,
         productsPrice: data.productsPrice,
         deliveryPrice: data.deliveryPrice,
         totalPrice: data.totalPrice,
@@ -104,6 +113,7 @@ orderModel.update = (data, callback) => {
         obj.num = data.num;
         obj.deliveryMethod = data.deliveryMethod;
         obj.paymentMethod = data.paymentMethod;
+        obj.paymentState = data.paymentState;
         obj.productsPrice = data.productsPrice;
         obj.deliveryPrice = data.deliveryPrice;
         obj.totalPrice = data.totalPrice;
@@ -163,24 +173,46 @@ orderModel.sendUserMail = async (data, callback) => {
     // console.log("dataUser", data);
     data.template = "CLMailUserTemplate";
     data.sendMail = data.user.email;
+    if (data.paymentMethod == 'culqi') {
+        data.pagado = true
+    } else {
+        data.pagado = false;
+    }
+    console.log(data);
     sendTemplateEmail(data).then(res => {
         callback(null, res);
     });
 }
 
 orderModel.sendAdminMail = async (data, callback) => {
-    // console.log("dataAdmin", data);
     data.template = "CLMailAdminTemplate";
     data.sendMail = "admin@compralocal.pe";
 
     data.carts.forEach(element => {
         element.helpProyPrice = element.totalPrice * 0.01;
-        element.helpProyPrice = Math.round((element.helpProyPrice + Number.EPSILON) * 100) / 100;
+        element.helpProyPrice = Math.round((element.helpProyPrice) * 100) / 100;
         element.culqiPrice = element.totalPrice * 0.06;
-        element.culqiPrice = Math.round((element.culqiPrice + Number.EPSILON) * 100) / 100;
+        element.culqiPrice = Math.round((element.culqiPrice) * 100) / 100;
         element.supplierPrice = element.totalPrice - (element.helpProyPrice + element.culqiPrice);  //93%
+        element.supplierPrice = Math.round((element.supplierPrice) * 100) / 100;
     });
 
+    sendTemplateEmail(data).then(res => {
+        callback(null, res);
+    });
+}
+
+orderModel.sendPagoPendienteMail = async (data, callback) => {
+    // console.log("dataUser", data);
+    data.template = "CLMailPagoPendienteTemplate";
+    data.sendMail = data.user.email;
+    if (data.paymentMethod == 'transferencia') {
+        data.paymentMethodString = 'transferencia bancaria';
+        data.paymentAccount = 'CTA. CTE. Soles: 193-25849940-48 / CCI: 00219300258499404818';
+    } else {
+        data.paymentMethodString = 'YAPE';
+        data.paymentAccount = '999-888-777';
+    }
     sendTemplateEmail(data).then(res => {
         callback(null, res);
     });

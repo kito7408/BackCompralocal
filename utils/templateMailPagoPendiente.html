@@ -55,6 +55,17 @@
             font-family: 'Montserrat', sans-serif !important;
         }
 
+        .cuadro{
+            padding: 1rem;
+            border: 2px solid black;
+            background-color: #e9e9e9;
+            margin-bottom: 2rem;
+        }
+
+        .cuadro>h3{
+            margin: 0%;
+        }
+
         .container,
         .container-fluid,
         .container-lg,
@@ -74,25 +85,6 @@
             margin-bottom: 1rem;
         }
 
-        .text-success {
-            color: #28a745 !important;
-        }
-
-        .text-danger {
-            color: #dc3545 !important;
-        }
-
-        .cuadro {
-            padding: 1rem;
-            border: 2px solid black;
-            background-color: #e9e9e9;
-            margin-bottom: 2rem;
-        }
-
-        .cuadro>h3 {
-            margin: 0%;
-        }
-
         @media (min-width: 576px) {
 
             .container,
@@ -102,10 +94,6 @@
 
             .contenedor {
                 width: 100%;
-            }
-
-            .cuadro {
-                width: 80%;
             }
         }
 
@@ -130,10 +118,6 @@
             .contenedor {
                 width: 80%;
             }
-
-            .cuadro {
-                width: 70%;
-            }
         }
 
         @media (min-width: 1200px) {
@@ -149,10 +133,6 @@
             .contenedor {
                 width: 50%;
             }
-
-            .cuadro {
-                width: 40%;
-            }
         }
     </style>
 </head>
@@ -163,66 +143,21 @@
             <img src="https://compralocal.pe/assets/imgs/logo_before.png" alt="CompraLocal" class="img-logo">
         </a>
         <h1>Hola {{user.name}}</h1>
-        <h2>Orden #{{num}}</h2>
-        <p>Fecha de la orden: <b>{{date}}</b></p>
-        <p>Precio total de la orden: <b>{{totalPrice}}</b></p>
-        <p>Método de pago: <b>{{paymentMethod}}</b></p>
-        <p>Método de envío: <b>{{deliveryMethod}}</b></p>
-        <p>El proyecto al que apoya esta compra es <b>{{helpproyect.name}}</b></p>
-        <p>Cupón: {{cupon}}</p>
-        <p>Comentario: {{coment}}</p>
-        {{#if pagado}}
-        <p>Estado de la orden: <b class="text-success">{{paymentState}}</b></p>
-        {{else}}
-        <p>Estado de la orden: <b class="text-danger">{{paymentState}}</b></p>
-        {{/if}}
-        <hr>
-        <h5>Detalle de la orden.</h5>
-        <table class="table table-hover table-bordered">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col">Cantidad</th>
-                    <th scope="col">Producto</th>
-                    <th scope="col">Precio</th>
-                    <th scope="col">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each carts}}
-                <tr>
-                    <td class="align-middle">{{quantity}}</td>
-                    <td class="align-middle">
-                        {{product.name}}
-                    </td>
-                    <td class="align-middle">{{product.price}}</td>
-                    <td class="align-middle">{{totalPrice}}</td>
-                </tr>
-                {{/each}}
-                <tr>
-                    <th scope="row" colspan="3">Total Productos</th>
-                    <th>{{productsPrice}}</th>
-                </tr>
-                <tr>
-                    <th scope="row" colspan="3">Total Envío</th>
-                    <th>{{deliveryPrice}}</th>
-                </tr>
-                <tr>
-                    <th scope="row" colspan="3">Importe total de la compra</th>
-                    <th>{{totalPrice}}</th>
-                </tr>
-            </tbody>
-        </table>
+        <h2>¡GRACIAS POR COMPRAR EN COMPRALOCAL!</h2>
         <div class="cuadro">
-            <h3>Dirección de entrega</h3>
+            <h3>Orden #{{num}} en esepera de pago por {{paymentMethodString}}</h3>
             <hr>
-            <p>
-                <b>{{user.name}} {{user.last_name}}</b> - {{user.docNum}} <br>
-                {{user.email}} <br>
-                {{user.direccion}} <br>
-                {{user.provincia}} <br>
-                {{user.ciudad}} <br>
-                {{user.distrito}}
-            </p>
+            <small>La orden <b>#{{num}}</b> ha sido realizada correctamente y será enviada tan pronto como se reciba el
+                pago.</small>
+        </div>
+
+        <div class="cuadro">
+            <h3>Por favor, recuerde que ha seleccionado {{paymentMethodString}} como forma de pago.</h3>
+            <hr>
+            <small>Estos son los datos para realizar el pago mediante {{paymentMethod}}</small><br>
+            <small><b>Importe:</b> S/. {{totalPrice}}</small><br>
+            <small><b>Titular de la cuenta:</b> Marcial Medina</small><br>
+            <small><b>Datos de la cuenta:</b> {{paymentAccount}}</small>
         </div>
     </div>
 </body>

@@ -18,6 +18,10 @@ const Order = connection.define('order', {
 		type: Sequelize.STRING,
 		allowNull: false
 	},
+	paymentState: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
 	productsPrice: {
 		type: Sequelize.DOUBLE,
 		allowNull: false

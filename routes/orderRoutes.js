@@ -14,6 +14,12 @@ module.exports = function (app) {
         });
     });
 
+    app.put('/order/sendPagoPendienteMail', (req,res) => {
+        Order.sendPagoPendienteMail(req.body, (err, data) => {
+            res.json(data);
+        });
+    });
+
     app.get('/order', (req, res) => {
         Order.getAll((err, data) => {
             res.json(data);
@@ -37,6 +43,7 @@ module.exports = function (app) {
             num: req.body.num,
             deliveryMethod: req.body.deliveryMethod,
             paymentMethod: req.body.paymentMethod,
+            paymentState: req.body.paymentState,
             productsPrice: req.body.productsPrice,
             deliveryPrice: req.body.deliveryPrice,
             totalPrice: req.body.totalPrice,
@@ -65,16 +72,18 @@ module.exports = function (app) {
 
     app.put('/order/:id', (req, res) => {
         const orderData = {
+            id: req.body.id,
             num: req.body.num,
             deliveryMethod: req.body.deliveryMethod,
             paymentMethod: req.body.paymentMethod,
+            paymentState: req.body.paymentState,
             productsPrice: req.body.productsPrice,
             deliveryPrice: req.body.deliveryPrice,
             totalPrice: req.body.totalPrice,
             cupon: req.body.cupon,
             coment: req.body.coment,
             userId: req.body.userId,
-            helpProyectId: req.body.helpProyectId
+            helpProyectId: req.body.helpproyectId
         };
 
         Order.update(orderData, (err, data) => {
