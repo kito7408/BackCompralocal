@@ -22,6 +22,10 @@ const Subscription = connection.define('subscription', {
 		type: Sequelize.STRING,
 		allowNull: false
 	},
+	dni: {
+		type: Sequelize.STRING,
+		allowNull: true
+	},
 	marca: {
 		type: Sequelize.STRING,
 		allowNull: true

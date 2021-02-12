@@ -15,6 +15,7 @@ subscriptionModel.insert = (data, callback) => {
         email: data.email,
         phone: data.phone,
         clientType: data.clientType,
+        dni: data.dni,
         marca: data.marca,
         ruc: data.ruc,
         categoria: data.categoria,
@@ -37,6 +38,7 @@ subscriptionModel.update = (data, callback) => {
         obj.email = data.email;
         obj.phone = data.phone;
         obj.clientType = data.clientType;
+        obj.dni = data.dni;
         obj.marca = data.marca;
         obj.ruc = data.ruc;
         obj.categoria = data.categoria;
