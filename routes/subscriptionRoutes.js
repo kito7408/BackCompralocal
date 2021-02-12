@@ -24,6 +24,7 @@ module.exports = function (app) {
             marca: req.body.marca,
             ruc: req.body.ruc,
             categoria: req.body.categoria,
+            departamento: req.body.departamento,
             provincia: req.body.provincia,
             distrito: req.body.distrito
         };
@@ -56,6 +57,7 @@ module.exports = function (app) {
             marca: req.body.marca,
             ruc: req.body.ruc,
             categoria: req.body.categoria,
+            departamento: req.body.departamento,
             provincia: req.body.provincia,
             distrito: req.body.distrito
         };

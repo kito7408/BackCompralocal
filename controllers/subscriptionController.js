@@ -18,6 +18,7 @@ subscriptionModel.insert = (data, callback) => {
         marca: data.marca,
         ruc: data.ruc,
         categoria: data.categoria,
+        departamento: data.departamento,
         provincia: data.provincia,
         distrito: data.distrito
     }).then(result => {
@@ -39,6 +40,7 @@ subscriptionModel.update = (data, callback) => {
         obj.marca = data.marca;
         obj.ruc = data.ruc;
         obj.categoria = data.categoria;
+        obj.departamento = data.departamento;
         obj.provincia = data.provincia;
         obj.distrito = data.distrito;
         obj.save().then(result => callback(null, result.get()));

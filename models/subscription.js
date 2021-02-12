@@ -34,6 +34,10 @@ const Subscription = connection.define('subscription', {
 		type: Sequelize.STRING,
 		allowNull: false
 	},
+	departamento: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
 	provincia: {
 		type: Sequelize.STRING,
 		allowNull: false
