@@ -20,6 +20,12 @@ module.exports = function (app) {
         });
     });
 
+    app.put('/order/sendThanksUserMail', (req,res) => {
+        Order.sendThanksUserMail(req.body, (err, data) => {
+            res.json(data);
+        });
+    });
+
     app.get('/order', (req, res) => {
         Order.getAll((err, data) => {
             res.json(data);

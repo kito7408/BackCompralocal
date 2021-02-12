@@ -178,7 +178,6 @@ orderModel.sendUserMail = async (data, callback) => {
     } else {
         data.pagado = false;
     }
-    console.log(data);
     sendTemplateEmail(data).then(res => {
         callback(null, res);
     });
@@ -213,6 +212,15 @@ orderModel.sendPagoPendienteMail = async (data, callback) => {
         data.paymentMethodString = 'YAPE';
         data.paymentAccount = '999-888-777';
     }
+    sendTemplateEmail(data).then(res => {
+        callback(null, res);
+    });
+}
+
+orderModel.sendThanksUserMail = async (data, callback) => {
+    // console.log("dataUser", data);
+    data.template = "CLMailThanksUserTemplate";
+    data.sendMail = data.user.email;
     sendTemplateEmail(data).then(res => {
         callback(null, res);
     });

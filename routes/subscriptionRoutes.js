@@ -19,7 +19,13 @@ module.exports = function (app) {
             name: req.body.name,
             last_name: req.body.last_name,
             email: req.body.email,
-            phone: req.body.phone
+            phone: req.body.phone,
+            clientType: req.body.clientType,
+            marca: req.body.marca,
+            ruc: req.body.ruc,
+            categoria: req.body.categoria,
+            provincia: req.body.provincia,
+            distrito: req.body.distrito
         };
         Subscription.insert(data, (err, result) => {
             if (result) {
@@ -41,10 +47,17 @@ module.exports = function (app) {
     app.put('/subscription/:id', (req, res) => {
 
         const data = {
+            id: req.body.id,
             name: req.body.name,
             last_name: req.body.last_name,
             email: req.body.email,
-            phone: req.body.phone
+            phone: req.body.phone,
+            clientType: req.body.clientType,
+            marca: req.body.marca,
+            ruc: req.body.ruc,
+            categoria: req.body.categoria,
+            provincia: req.body.provincia,
+            distrito: req.body.distrito
         };
 
         Subscription.update(data, (err, result) => {

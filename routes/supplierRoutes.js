@@ -28,6 +28,12 @@ module.exports = function (app) {
         })
     });
 
+    app.get('/suppliers/name/:name', (req, res) => {
+        Supplier.findByName(req.params.name, (err, data) => {
+            res.json(data);
+        })
+    });
+
     app.post('/suppliers', upload.single('image'), (req, res) => {
         console.log(req.body);
         const now = new Date().toISOString();
@@ -85,6 +91,7 @@ module.exports = function (app) {
     app.put('/suppliers/:id', (req, res) => {
 
         const suppData = {
+            id: req.body.id,
             name: req.body.name,
             business_name: req.body.business_name,
             ruc: req.body.ruc,

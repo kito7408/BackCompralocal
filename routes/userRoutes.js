@@ -57,6 +57,7 @@ module.exports = function (app) {
     app.put('/users/:id', (req, res) => {
 
         const userData = {
+            id: req.body.id,
             name: req.body.name,
             last_name: req.body.last_name,
             email: req.body.email,

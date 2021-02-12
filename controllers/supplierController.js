@@ -70,4 +70,14 @@ supplierModel.findById = (id, callback) => {
     });
 }
 
+supplierModel.findByName = (name, callback) => {
+    Supplier.findOne({
+        where: {
+            name: name
+        }
+    }).then(result => {
+        callback(null, result);
+    });
+}
+
 module.exports = supplierModel;

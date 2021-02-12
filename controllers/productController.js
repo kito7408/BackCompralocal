@@ -5,6 +5,7 @@ const Product = require('../models/product');
 const Category = require('../models/category');
 const SubCategory = require('../models/subCategory');
 const Supplier = require('../models/supplier');
+const Cart = require('../models/cart');
 
 let productModel = {};
 
@@ -19,6 +20,9 @@ productModel.getAll = (callback) => {
             as: 'subcategory'
         },
             Supplier],
+        where: {
+            available: true
+        },
         order: Sequelize.literal('rand()')
     }).then(result => {
         callback(null, result);
@@ -26,11 +30,17 @@ productModel.getAll = (callback) => {
 };
 
 productModel.insert = (data, callback) => {
+    if (data.isOffer == 'undefined') {
+        data.isOffer = false;
+    }
+    if (data.priceOffer == 'undefined') {
+        data.priceOffer = '0';
+    }
+    console.log(data);
     Product.create({
         name: data.name,
         description: data.description,
         price: data.price,
-        image: data.image,
         numSellOnWeek: data.numSellOnWeek,
         isTrent: data.isTrent,
         categoryId: data.categoryId,
@@ -38,31 +48,64 @@ productModel.insert = (data, callback) => {
         supplierId: data.supplierId,
         isOffer: data.isOffer,
         priceOffer: data.priceOffer,
-        unit: data.unit
+        unit: data.unit,
+        image1: data.image1,
+        image2: data.image2,
+        image3: data.image3,
+        image4: data.image4,
+        image5: data.image5,
+        available: true
     }).then(result => {
         callback(null, result.get());
     });
 };
 
 productModel.update = (data, callback) => {
+    // Product.findOne({
+    //     where: {
+    //         id: data.id
+    //     }
+    // }).then(obj => {
+    //     obj.name = data.name;
+    //     obj.description = data.description;
+    //     obj.price = data.price;
+    //     obj.image = data.image;
+    //     obj.numSellOnWeek = data.numSellOnWeek;
+    //     obj.isTrent = data.isTrent;
+    //     obj.categoryId = data.categoryId;
+    //     obj.subCategoryId = data.subCategoryId;
+    //     obj.supplierId = data.supplierId;
+    //     obj.isOffer = data.isOffer;
+    //     obj.priceOffer = data.priceOffer;
+    //     obj.unit = data.unit;
+    //     obj.save().then(result => callback(null, result.get()));
+    // });
+
     Product.findOne({
         where: {
             id: data.id
         }
     }).then(obj => {
-        obj.name = data.name;
-        obj.description = data.description;
-        obj.price = data.price;
-        obj.image = data.image;
-        obj.numSellOnWeek = data.numSellOnWeek;
-        obj.isTrent = data.isTrent;
-        obj.categoryId = data.categoryId;
-        obj.subCategoryId = data.subCategoryId;
-        obj.supplierId = data.supplierId;
-        obj.isOffer = data.isOffer;
-        obj.priceOffer = data.priceOffer;
-        obj.unit = data.unit;
-        obj.save().then(result => callback(null, result.get()));
+        obj.available = false;
+        obj.save().then(res => {
+            Product.create({
+                name: data.name,
+                description: data.description,
+                price: data.price,
+                image: data.image,
+                numSellOnWeek: data.numSellOnWeek,
+                isTrent: data.isTrent,
+                categoryId: data.categoryId,
+                subcategoryId: data.subcategoryId,
+                supplierId: data.supplierId,
+                isOffer: data.isOffer,
+                priceOffer: data.priceOffer,
+                unit: data.unit,
+                available: true
+            }).then(result => {
+                callback(null, result.get());
+            });
+        });
     });
 };
 
@@ -72,7 +115,24 @@ productModel.delete = (id, callback) => {
             id: id
         }
     }).then(obj => {
-        obj.destroy().then(result => callback(null, result.get()));
+        obj.available = false;
+        // obj.save().then(result => callback(null, result.get()));
+        obj.save().then(result => {
+            Cart.findAll({
+                where: {
+                    productId: id
+                }
+            }).then(async cartItems => {
+                await cartItems.forEach(element => {
+                    if (!element.isBuyed) {
+                        element.isBuyed = true;
+                        element.save();   
+                    }
+                });
+                callback(null, result.get());
+            });
+        });
+        // obj.destroy().then(result => callback(null, result.get()));
     });
 };
 
@@ -88,7 +148,8 @@ productModel.findById = (id, callback) => {
         },
             Supplier],
         where: {
-            id: id
+            id: id,
+            available: true
         },
         order: [
             ['id', 'DESC']
@@ -110,7 +171,8 @@ productModel.findByCategory = (id, callback) => {
         },
             Supplier],
         where: {
-            categoryId: id
+            categoryId: id,
+            available: true
         },
         order: [
             ['id', 'DESC']
@@ -132,7 +194,8 @@ productModel.findBySubCategory = (id, callback) => {
         },
             Supplier],
         where: {
-            subCategoryId: id
+            subCategoryId: id,
+            available: true
         },
         order: [
             ['id', 'DESC']
@@ -154,7 +217,8 @@ productModel.findBySupplier = (id, callback) => {
         },
             Supplier],
         where: {
-            supplierId: id
+            supplierId: id,
+            available: true
         },
         order: [
             ['id', 'DESC']
@@ -178,7 +242,8 @@ productModel.findBySearch = (searchText, callback) => {
         where: {
             name: {
                 [Op.like]: '%' + searchText + '%'
-            }
+            },
+            available: true
         },
         order: [
             ['id', 'DESC']
@@ -199,6 +264,9 @@ productModel.sortByBuys = (callback) => {
             as: 'subcategory'
         },
             Supplier],
+        where: {
+            available: true
+        },
         order: [
             ['numSellOnWeek', 'DESC']
         ]
@@ -237,6 +305,9 @@ productModel.updateSales = async (dataProds, callback) => {
             as: 'subcategory'
         },
             Supplier],
+        where: {
+            available: true
+        },
         order: Sequelize.literal('rand()')
     }).then(result => {
         callback(null, result);

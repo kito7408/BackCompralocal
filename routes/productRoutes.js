@@ -18,12 +18,12 @@ const s3 = new AWS.S3({
 // });
 
 const storage = multer.memoryStorage({
-    destination: function(req, file, callback) {
+    destination: function (req, file, callback) {
         callback(null, '')
     }
 });
 
-const upload = multer({storage: storage});
+const upload = multer({ storage: storage });
 
 module.exports = function (app) {
 
@@ -69,60 +69,72 @@ module.exports = function (app) {
         })
     });
 
-    app.post('/products', upload.single('image'), (req, res) => {
-        
-        // console.log(req.file);
+    app.post('/products', upload.array('image'), async (req, res) => {
+        // console.log(req.files);
+
         const now = new Date().toISOString();
         const date = now.replace(/:/g, '-');
-        const filename = date + req.file.originalname;
+        // const filename = date + req.file.originalname;
 
-        var params = {
-            Bucket: 'compralocal-images/products',
-            Key: filename,
-            Body: req.file.buffer
-        }
+        const prodImages = req.files;
 
-        s3.upload(params, (error, data) => {
-            if(error){
-                res.status(500).json({
-                    success: false,
-                    msg: 'Error',
-                    err: error
-                })
+        var pathImgs = [];
+
+        await prodImages.forEach(element => {
+
+            const filename = date + element.originalname;
+            pathImgs.push(filename);
+            var params = {
+                Bucket: 'compralocal-images/products',
+                Key: filename,
+                Body: element.buffer
             }
-    
-            const productData = {
-                name: req.body.name,
-                description: req.body.description,
-                price: req.body.price,
-                image: filename,
-                numSellOnWeek: req.body.numSellOnWeek,
-                isTrent: req.body.isTrent,
-                categoryId: req.body.categoryId,
-                subcategoryId: req.body.subcategoryId,
-                supplierId: req.body.supplierId,
-                isOffer: req.body.isOffer,
-                priceOffer: req.body.priceOffer,
-                unit: req.body.unit
-            };
-            Product.insert(productData, (err, data) => {
-                if (data) {
-                    res.json({
-                        success: true,
-                        msg: 'Product Inserted',
-                        data: data
-                    })
-                } else {
+
+            s3.upload(params, (error, data) => {
+                if (error) {
                     res.status(500).json({
                         success: false,
                         msg: 'Error',
-                        err: err
+                        err: error
                     })
                 }
-            })
-        })
+            });
+        });
 
-        
+        const productData = {
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            numSellOnWeek: req.body.numSellOnWeek,
+            isTrent: req.body.isTrent,
+            categoryId: req.body.categoryId,
+            subcategoryId: req.body.subcategoryId,
+            supplierId: req.body.supplierId,
+            isOffer: req.body.isOffer,
+            priceOffer: req.body.priceOffer,
+            unit: req.body.unit,
+            image1: pathImgs[0],
+            image2: pathImgs[1],
+            image3: pathImgs[2],
+            image4: pathImgs[3],
+            image5: pathImgs[4]
+        };
+
+        Product.insert(productData, (err, data) => {
+            if (data) {
+                res.json({
+                    success: true,
+                    msg: 'Product Inserted',
+                    data: data
+                })
+            } else {
+                res.status(500).json({
+                    success: false,
+                    msg: 'Error',
+                    err: err
+                })
+            }
+        });
     });
 
     app.put('/products/sales', (req, res) => {
@@ -146,42 +158,96 @@ module.exports = function (app) {
         })
     });
 
-    app.put('/products/:id', (req, res) => {
+    app.put('/products/:id', upload.single('image'), (req, res) => {
 
-        const productData = {
-            name: req.body.name,
-            description: req.body.description,
-            price: req.body.price,
-            image: req.file.path,
-            numSellOnWeek: req.body.numSellOnWeek,
-            isTrent: req.body.isTrent,
-            categoryId: req.body.categoryId,
-            subcategoryId: req.body.subcategoryId,
-            supplierId: req.body.supplierId,
-            isOffer: req.body.isOffer,
-            priceOffer: req.body.priceOffer,
-            unit: req.body.unit
-        };
+        //pone al producto como dispoble = false, luego crea uno igual con los cambios realizados
+        const now = new Date().toISOString();
+        const date = now.replace(/:/g, '-');
+        const filename = date + req.file.originalname;
 
-        Product.update(productData, (err, data) => {
-            if (data) {
-                res.json({
-                    success: true,
-                    msg: 'Product Updated',
-                    data: data
-                });
-            } else {
-                res.json({
+        var params = {
+            Bucket: 'compralocal-images/products',
+            Key: filename,
+            Body: req.file.buffer
+        }
+
+        s3.upload(params, (error, data) => {
+            if (error) {
+                res.status(500).json({
                     success: false,
-                    msg: 'error',
-                    err: err
+                    msg: 'Error',
+                    err: error
                 })
             }
-        })
+
+            const productData = {
+                id: req.body.id,
+                name: req.body.name,
+                description: req.body.description,
+                price: req.body.price,
+                image: filename,
+                numSellOnWeek: req.body.numSellOnWeek,
+                isTrent: req.body.isTrent,
+                categoryId: req.body.categoryId,
+                subcategoryId: req.body.subcategoryId,
+                supplierId: req.body.supplierId,
+                isOffer: req.body.isOffer,
+                priceOffer: req.body.priceOffer,
+                unit: req.body.unit
+            };
+            Product.update(productData, (err, data) => {
+                if (data) {
+                    res.json({
+                        success: true,
+                        msg: 'Product Updated',
+                        data: data
+                    })
+                } else {
+                    res.status(500).json({
+                        success: false,
+                        msg: 'Error',
+                        err: err
+                    })
+                }
+            })
+        });
+
+        // const productData = {
+        //     id: req.body.id,
+        //     name: req.body.name,
+        //     description: req.body.description,
+        //     price: req.body.price,
+        //     image: req.file.path,
+        //     numSellOnWeek: req.body.numSellOnWeek,
+        //     isTrent: req.body.isTrent,
+        //     categoryId: req.body.categoryId,
+        //     subcategoryId: req.body.subcategoryId,
+        //     supplierId: req.body.supplierId,
+        //     isOffer: req.body.isOffer,
+        //     priceOffer: req.body.priceOffer,
+        //     unit: req.body.unit
+        // };
+
+        // Product.update(productData, (err, data) => {
+        //     if (data) {
+        //         res.json({
+        //             success: true,
+        //             msg: 'Product Updated',
+        //             data: data
+        //         });
+        //     } else {
+        //         res.json({
+        //             success: false,
+        //             msg: 'error',
+        //             err: err
+        //         })
+        //     }
+        // });
     });
 
     app.delete('/products/:id', (req, res) => {
         Product.delete(req.params.id, (err, data) => {
+            //no borra de verdad, solo cambia el campo de disponible a falso
             if (data) {
                 res.json({
                     success: true,

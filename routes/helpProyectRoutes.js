@@ -38,6 +38,7 @@ module.exports = function (app) {
     app.put('/helpproy/:id', (req, res) => {
 
         const helpData = {
+            id: req.body.id,
             name: req.body.name
         };
 

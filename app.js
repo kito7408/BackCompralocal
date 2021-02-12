@@ -37,6 +37,7 @@ require('./routes/supplierRoutes')(app);
 require('./routes/orderRoutes')(app);
 require('./routes/helpProyectRoutes')(app);
 require('./routes/subscriptionRoutes')(app);
+require('./routes/prodCommentRoutes')(app);
 
 
 app.listen(app.get('port'), () => {

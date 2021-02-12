@@ -13,7 +13,13 @@ subscriptionModel.insert = (data, callback) => {
         name: data.name,
         last_name: data.last_name,
         email: data.email,
-        phone: data.phone
+        phone: data.phone,
+        clientType: data.clientType,
+        marca: data.marca,
+        ruc: data.ruc,
+        categoria: data.categoria,
+        provincia: data.provincia,
+        distrito: data.distrito
     }).then(result => {
         callback(null, result.get());
     });
@@ -29,6 +35,12 @@ subscriptionModel.update = (data, callback) => {
         obj.last_name = data.last_name;
         obj.email = data.email;
         obj.phone = data.phone;
+        obj.clientType = data.clientType;
+        obj.marca = data.marca;
+        obj.ruc = data.ruc;
+        obj.categoria = data.categoria;
+        obj.provincia = data.provincia;
+        obj.distrito = data.distrito;
         obj.save().then(result => callback(null, result.get()));
     });
 };

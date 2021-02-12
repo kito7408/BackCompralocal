@@ -39,6 +39,7 @@ module.exports = function (app) {
     app.put('/userTypes/:id', (req, res) => {
 
         const typeData = {
+            id: req.body.id,
             name: req.body.name
         };
 

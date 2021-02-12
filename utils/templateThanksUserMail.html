@@ -55,21 +55,6 @@
             font-family: 'Montserrat', sans-serif !important;
         }
 
-        .cuadro {
-            padding: 1rem;
-            border: 2px solid black;
-            background-color: #e9e9e9;
-            margin-bottom: 2rem;
-        }
-
-        .cuadro>h3 {
-            margin: 0%;
-        }
-
-        .justify-text{
-            text-align: justify;
-        }
-
         .container,
         .container-fluid,
         .container-lg,
@@ -89,6 +74,62 @@
             margin-bottom: 1rem;
         }
 
+        .text-success {
+            color: #28a745 !important;
+        }
+
+        .text-danger {
+            color: #dc3545 !important;
+        }
+
+        .cuadro {
+            padding: 1rem;
+            border: 2px solid black;
+            background-color: #e9e9e9;
+            margin-bottom: 2rem;
+        }
+
+        .cuadro>h3 {
+            margin: 0%;
+        }
+
+        .btn {
+            display: inline-block;
+            cursor: pointer;
+            font-weight: 400;
+            color: #212529;
+            text-align: center;
+            vertical-align: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: transparent;
+            border: 1px solid transparent;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: .25rem;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .btn:hover {
+            color: #212529;
+            text-decoration: none;
+        }
+
+        .btn-info {
+            color: #fff;
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .btn-info:hover {
+            color: #fff;
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
         @media (min-width: 576px) {
 
             .container,
@@ -98,6 +139,10 @@
 
             .contenedor {
                 width: 100%;
+            }
+
+            .cuadro {
+                width: 80%;
             }
         }
 
@@ -122,6 +167,10 @@
             .contenedor {
                 width: 80%;
             }
+
+            .cuadro {
+                width: 70%;
+            }
         }
 
         @media (min-width: 1200px) {
@@ -137,6 +186,10 @@
             .contenedor {
                 width: 50%;
             }
+
+            .cuadro {
+                width: 40%;
+            }
         }
     </style>
 </head>
@@ -147,26 +200,30 @@
             <img src="https://compralocal.pe/assets/imgs/logo_before.png" alt="CompraLocal" class="img-logo">
         </a>
         <h1>Hola {{user.name}}</h1>
-        <h2>¡GRACIAS POR COMPRAR EN COMPRALOCAL!</h2>
-        <div class="cuadro">
-            <h3>Orden #{{num}} en esepera de pago por {{paymentMethodString}}</h3>
-            <hr>
-            <small>La orden <b>#{{num}}</b> ha sido realizada correctamente y será enviada tan pronto como se reciba el
-                pago.</small>
-        </div>
-
-        <div class="cuadro">
-            <h3>Por favor, recuerde que ha seleccionado {{paymentMethodString}} como forma de pago.</h3>
-            <hr>
-            <small>Estos son los datos para realizar el pago mediante {{paymentMethod}}</small><br>
-            <small><b>Importe:</b> S/. {{totalPrice}}</small><br>
-            <small><b>Titular de la cuenta:</b> Marcial Medina</small><br>
-            <small><b>Datos de la cuenta:</b> {{paymentAccount}}</small>
-        </div>
-
-        <div class="justify-text">
-            Una vez realizado el pago, debes enviar un correo en respuesta a éste, adjuntando el voucher correspondiente
-            al pago realizado. Una vez validado el pago, se tramitará el envío de tu compra.
-        </div>
+        <p>Hemos registrado que tu pedido ha sido recepcionado correctamente.</p>
+        <p>Te agradecemos por haber realizado tu compra en CompraLocal</p>
+        <p>Por último, te pedimos nos des tus comentarios con respecto a los productos que ordenaste en esta ocasión</p>
+        <hr>
+        <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each carts}}
+                <tr>
+                    <td class="align-middle">
+                        {{product.name}}
+                    </td>
+                    <td class="align-middle">
+                        <a class="btn btn-info" href="https://compralocal.pe/products/{{product.id}}">Hacer
+                            comentario</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
 </body>

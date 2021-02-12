@@ -17,9 +17,25 @@ const Product = connection.define('product', {
 		type: Sequelize.DOUBLE,
 		allowNull: false
 	},
-	image: {
+	image1: {
 		type: Sequelize.TEXT,
 		allowNull: false
+	},
+	image2: {
+		type: Sequelize.TEXT,
+		allowNull: true
+	},
+	image3: {
+		type: Sequelize.TEXT,
+		allowNull: true
+	},
+	image4: {
+		type: Sequelize.TEXT,
+		allowNull: true
+	},
+	image5: {
+		type: Sequelize.TEXT,
+		allowNull: true
 	},
 	numSellOnWeek: {
 		type: Sequelize.DOUBLE,
@@ -31,14 +47,18 @@ const Product = connection.define('product', {
 	},
 	isOffer: {
 		type: Sequelize.BOOLEAN,
-		allowNull: false
+		allowNull: true
 	},
 	priceOffer: {
 		type: Sequelize.DOUBLE,
-		allowNull: false
+		allowNull: true
 	},
 	unit: {
 		type: Sequelize.STRING,
+		allowNull: false
+	},
+	available: {
+		type: Sequelize.BOOLEAN,
 		allowNull: false
 	}
 });

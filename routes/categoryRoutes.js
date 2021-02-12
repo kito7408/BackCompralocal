@@ -38,6 +38,7 @@ module.exports = function (app) {
     app.put('/category/:id', (req, res) => {
 
         const categoryData = {
+            id: req.body.id,
             name: req.body.name
         };
 

@@ -1,6 +1,6 @@
 {
     "Source":"Admin Compralocal <admin@compralocal.pe>",
-    "Template": "CLMailUserTemplate",
+    "Template": "CLMailThanksUserTemplate",
     "Destination": {
       "ToAddresses": [ "Cristopher.lizandro.11@gmail.com"
       ]

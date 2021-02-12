@@ -45,6 +45,7 @@ module.exports = function (app) {
     app.put('/subcategory/:id', (req, res) => {
 
         const subCategoryData = {
+            id: req.body.id,
             name: req.body.name,
             categoryId: req.body.categoryId
         };
