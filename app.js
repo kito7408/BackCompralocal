@@ -29,7 +29,7 @@ app.use(function (req, res, next) {
 require('./routes/userRoutes')(app);
 require('./routes/userTypeRoutes')(app);
 require('./routes/categoryRoutes')(app);
-require('./routes/subCategoryRoutes')(app);
+// require('./routes/subCategoryRoutes')(app);
 require('./routes/productRoutes')(app);
 require('./routes/cartRoutes')(app);
 require('./routes/postRoutes')(app);
@@ -38,6 +38,9 @@ require('./routes/orderRoutes')(app);
 require('./routes/helpProyectRoutes')(app);
 require('./routes/subscriptionRoutes')(app);
 require('./routes/prodCommentRoutes')(app);
+require('./routes/directionRoutes')(app);
+require('./routes/pageReviewRoutes')(app);
+require('./routes/infoContactoRoutes')(app);
 
 
 app.listen(app.get('port'), () => {

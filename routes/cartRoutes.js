@@ -126,7 +126,7 @@ module.exports = function (app) {
         })
     });
 
-    app.post('/cart/culqi', (req, res) => {
+    app.post('/cart/culqi/charge', (req, res) => {
         const culqiData = {
             amount: req.body.amount,
             currency_code: req.body.currency_code,
@@ -148,6 +148,54 @@ module.exports = function (app) {
                     msg: 'Error',
                     err: err
                 })
+            }
+        });
+    });
+
+    app.post('/cart/culqi/customer', (req, res) => {
+
+        Cart.culqiCustomer(req.body,(err, data)=> {
+            // console.log(data);
+            if (data) {
+                if (data.object == 'error') {
+                    res.status(500).json(data);
+                } else {
+                    res.json(data)
+                }
+            } else {
+                res.status(500).json(err)
+            }
+        });
+    });
+
+    app.post('/cart/culqi/card', (req, res) => {
+        
+        Cart.culqiCard(req.body,(err, data)=> {
+            // console.log(data);
+            if (data) {
+                if (data.object == 'error') {
+                    res.status(500).json(data);
+                } else {
+                    res.json(data)
+                }
+            } else {
+                res.status(500).json(err)
+            }
+        });
+    });
+
+    app.post('/cart/culqi/subscription', (req, res) => {
+        
+        Cart.culqiSubscription(req.body,(err, data)=> {
+            // console.log(data);
+            if (data) {
+                if (data.object == 'error') {
+                    res.status(500).json(data);
+                } else {
+                    res.json(data)
+                }
+            } else {
+                res.status(500).json(err)
             }
         });
     });

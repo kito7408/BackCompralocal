@@ -9,15 +9,15 @@ const Supplier = connection.define('supplier', {
 	},
 	business_name: {				//razon social
 		type: Sequelize.STRING,
-		allowNull: false
+		allowNull: true
 	},
 	ruc: {
 		type: Sequelize.STRING,
-		allowNull: false
+		allowNull: true
 	},
 	image: {						//logo de la empresa
 		type: Sequelize.TEXT,
-		allowNull: false
+		allowNull: true
 	},
 	description: {					//cuentanos tu historia
 		type: Sequelize.TEXT,
@@ -25,11 +25,11 @@ const Supplier = connection.define('supplier', {
 	},
 	bank: {
 		type: Sequelize.STRING,
-		allowNull: false
+		allowNull: true
 	},
 	account_number: {
 		type: Sequelize.STRING,
-		allowNull: false
+		allowNull: true
 	},
 	email: {					//correo dek contacto
 		type: Sequelize.STRING,
@@ -41,13 +41,25 @@ const Supplier = connection.define('supplier', {
 	},
 	dni_contact: {				//dni de contacto
 		type: Sequelize.STRING,
-		allowNull: false
+		allowNull: true
 	},
 	phone_contact: {			//telefono de contacto
 		type: Sequelize.STRING,
 		allowNull: false
 	},
-	fiscal_address: {			//direccion fiscal
+	departamento: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
+	provincia: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
+	distrito: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
+	direccion: {
 		type: Sequelize.STRING,
 		allowNull: false
 	}

@@ -1,12 +1,10 @@
 const Category = require('../models/category');
-const SubCategory = require('../models/subCategory');
+// const SubCategory = require('../models/subCategory');
 
 let categoryModel = {};
 
 categoryModel.getAll = (callback) => {
-    Category.findAll({
-        include: [SubCategory]
-    }).then(result => {
+    Category.findAll().then(result => {
         callback(null, result);
     });
 };

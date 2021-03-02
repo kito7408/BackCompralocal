@@ -72,6 +72,7 @@
             width: 100%;
             border-bottom: solid 4px black;
             margin-bottom: 1rem;
+            background-color: #7530ff;
         }
 
         .text-success {
@@ -91,6 +92,43 @@
 
         .cuadro>h3 {
             margin: 0%;
+        }
+
+        .btn {
+            display: inline-block;
+            cursor: pointer;
+            font-weight: 400;
+            color: #212529;
+            text-align: center;
+            vertical-align: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: transparent;
+            border: 1px solid transparent;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: .25rem;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .btn:hover {
+            color: #212529;
+            text-decoration: none;
+        }
+
+        .btn-info {
+            color: #fff;
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .btn-info:hover {
+            color: #fff;
+            background-color: #138496;
+            border-color: #117a8b;
         }
 
         @media (min-width: 576px) {
@@ -160,71 +198,18 @@
 <body>
     <div class="container contenedor">
         <a href="https://compralocal.pe/">
-            <img src="https://compralocal.pe/assets/imgs/logo_before.png" alt="CompraLocal" class="img-logo">
+            <img src="https://compralocal.pe/assets/imgs/logo_new_blanco.png" alt="CompraLocal" class="img-logo">
         </a>
-        <h1>Hola {{user.name}}</h1>
-        <h2>Orden #{{num}}</h2>
-        <p>Fecha de la orden: <b>{{date}}</b></p>
-        <p>Precio total de la orden: <b>{{totalPrice}}</b></p>
-        <p>Método de pago: <b>{{paymentMethod}}</b></p>
-        <p>Método de envío: <b>{{deliveryMethod}}</b></p>
-        <p>El proyecto al que apoya esta compra es <b>{{helpproyect.name}}</b></p>
-        <p>Cupón: {{cupon}}</p>
-        <p>Comentario: {{coment}}</p>
-        {{#if pagado}}
-        <p>Estado de la orden: <b class="text-success">{{paymentState}}</b></p>
-        {{else}}
-        <p>Estado de la orden: <b class="text-danger">{{paymentState}}</b></p>
-        {{/if}}
+        <h1>Hola {{contact_person}}</h1>
+        <p>Bienvenido a la familia CompraLocal.</p>
+        <p>Para completar tu registro en el sistema, es necesario que ingreses información adicional de tu marca, así
+            como los productos que venderás.</p>
+        <p>Para continuar, ingresa al siguiente link y responde las preguntas indicadas:</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfkt8rZOzc6a97iFQ6aWJyeKa4nOzdbr3i5IbeAIGTajITpig/viewform?usp=sf_link">Link</a>
         <hr>
-        <h5>Detalle de la orden.</h5>
-        <table class="table table-hover table-bordered">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col">Cantidad</th>
-                    <th scope="col">Producto</th>
-                    <th scope="col">Precio</th>
-                    <th scope="col">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each carts}}
-                <tr>
-                    <td class="align-middle">{{quantity}}</td>
-                    <td class="align-middle">
-                        {{product.name}}
-                    </td>
-                    <td class="align-middle">{{product.price}}</td>
-                    <td class="align-middle">{{totalPrice}}</td>
-                </tr>
-                {{/each}}
-                <tr>
-                    <th scope="row" colspan="3">Total Productos</th>
-                    <th>{{productsPrice}}</th>
-                </tr>
-                <tr>
-                    <th scope="row" colspan="3">Total Envío</th>
-                    <th>{{deliveryPrice}}</th>
-                </tr>
-                <tr>
-                    <th scope="row" colspan="3">Importe total de la compra</th>
-                    <th>{{totalPrice}}</th>
-                </tr>
-            </tbody>
-        </table>
-        <div class="cuadro">
-            <h3>Dirección de entrega</h3>
-            <hr>
-            <p>
-                <b>{{user.name}} {{user.last_name}}</b> - {{user.docNum}} <br>
-                {{user.email}} <br>
-                <b>Departamento:</b> {{direction.departamento}} <br>
-                <b>Provincia:</b> {{direction.provincia}} <br>
-                <b>Ciudad:</b> {{direction.ciudad}} <br>
-                <b>Distrito:</b> {{direction.distrito}} <br>
-                <b>Dirección:</b> {{direction.direccion}} <br>
-                <b>Referencia:</b> {{direction.referencia}}
-            </p>
-        </div>
+        <p>Cualquier duda, puedes comunicarte con nosotros mediante:</p>
+        <p>Email: admin@compralocal.pe</p>
+        <p>WhatsApp: 973-853-443</p>
+        <p>Muchas gracias.</p>
     </div>
 </body>

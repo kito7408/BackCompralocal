@@ -39,11 +39,11 @@ module.exports = function (app) {
         });
     });
 
-    app.get('/products/subcategory/:id', (req, res) => {
-        Product.findBySubCategory(req.params.id, (err, data) => {
-            res.json(data);
-        });
-    });
+    // app.get('/products/subcategory/:id', (req, res) => {
+    //     Product.findBySubCategory(req.params.id, (err, data) => {
+    //         res.json(data);
+    //     });
+    // });
 
     app.get('/products/supplier/:id', (req, res) => {
         Product.findBySupplier(req.params.id, (err, data) => {
@@ -108,7 +108,6 @@ module.exports = function (app) {
             numSellOnWeek: req.body.numSellOnWeek,
             isTrent: req.body.isTrent,
             categoryId: req.body.categoryId,
-            subcategoryId: req.body.subcategoryId,
             supplierId: req.body.supplierId,
             isOffer: req.body.isOffer,
             priceOffer: req.body.priceOffer,
@@ -189,7 +188,6 @@ module.exports = function (app) {
                 numSellOnWeek: req.body.numSellOnWeek,
                 isTrent: req.body.isTrent,
                 categoryId: req.body.categoryId,
-                subcategoryId: req.body.subcategoryId,
                 supplierId: req.body.supplierId,
                 isOffer: req.body.isOffer,
                 priceOffer: req.body.priceOffer,

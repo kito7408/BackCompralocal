@@ -26,6 +26,12 @@ module.exports = function (app) {
         });
     });
 
+    app.put('/order/sendNewSuppMail', (req,res) => {
+        Order.sendNewSuppMail(req.body, (err, data) => {
+            res.json(data);
+        });
+    });
+
     app.get('/order', (req, res) => {
         Order.getAll((err, data) => {
             res.json(data);
@@ -56,7 +62,8 @@ module.exports = function (app) {
             cupon: req.body.cupon,
             coment: req.body.coment,
             userId: req.body.userId,
-            helpProyectId: req.body.helpProyectId
+            helpProyectId: req.body.helpProyectId,
+            directionId: req.body.directionId
         };
 
         Order.insert(orderData, (err, data) => {
@@ -89,7 +96,8 @@ module.exports = function (app) {
             cupon: req.body.cupon,
             coment: req.body.coment,
             userId: req.body.userId,
-            helpProyectId: req.body.helpproyectId
+            helpProyectId: req.body.helpproyectId,
+            directionId: req.body.directionId
         };
 
         Order.update(orderData, (err, data) => {

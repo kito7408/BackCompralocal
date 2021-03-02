@@ -1,9 +1,9 @@
 var Sequelize = require('sequelize');
 var connection = require('../connection');
 const Cart = require('./cart');
-const OrderState = require('./orderState');
 const User = require('./user');
 const HelpProyect = require('./helpProyect');
+const Direction = require('./direction');
 
 const Order = connection.define('order', {
 	num: {
@@ -54,7 +54,13 @@ Order.belongsTo(HelpProyect, {
 	foreignKey: {
 		allowNull: false
 	}
-})
+});
+
+Order.belongsTo(Direction, {
+	foreignKey: {
+		allowNull: false
+	}
+});
 
 // Order.belongsTo(OrderState, {
 // 	foreignKey: {

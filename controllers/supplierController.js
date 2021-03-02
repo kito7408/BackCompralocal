@@ -10,6 +10,26 @@ supplierModel.getAll = (callback) => {
 
 
 supplierModel.insert = (data, callback) => {
+    
+    if (data.business_name == 'undefined' || data.business_name == undefined) {
+        data.business_name = null;
+    }
+    if (data.ruc == 'undefined' || data.ruc == undefined) {
+        data.ruc = null;
+    }
+    if (data.description == 'undefined' || data.description == undefined) {
+        data.description = null;
+    }
+    if (data.bank == 'undefined' || data.bank == undefined) {
+        data.bank = null;
+    }
+    if (data.account_number == 'undefined' || data.account_number == undefined) {
+        data.account_number = null;
+    }
+    if (data.dni_contact == 'undefined' || data.dni_contact == undefined) {
+        data.dni_contact = null;
+    }
+    
     Supplier.create({
         name: data.name,
         business_name: data.business_name,
@@ -22,7 +42,10 @@ supplierModel.insert = (data, callback) => {
         contact_person: data.contact_person,
         dni_contact: data.dni_contact,
         phone_contact: data.phone_contact,
-        fiscal_address: data.fiscal_address
+        departamento: data.departamento,
+        provincia: data.provincia,
+        distrito: data.distrito,
+        direccion: data.direccion
     }).then(result => {
         callback(null, result.get());
     });
@@ -45,7 +68,10 @@ supplierModel.update = (data, callback) => {
         obj.contact_person = data.contact_person;
         obj.dni_contact = data.dni_contact;
         obj.phone_contact = data.phone_contact;
-        obj.fiscal_address = data.fiscal_address;
+        obj.departamento = data.departamento;
+        obj.provincia = data.provincia;
+        obj.distrito = data.distrito;
+        obj.direccion = data.direccion;
         obj.save().then(result => callback(null, result.get()));
     });
 };
@@ -74,6 +100,19 @@ supplierModel.findByName = (name, callback) => {
     Supplier.findOne({
         where: {
             name: name
+        }
+    }).then(result => {
+        callback(null, result);
+    });
+}
+
+supplierModel.findByCoded = (data, callback) => {
+    Supplier.findOne({
+        where: {
+            name: data.name,
+            email: data.email,
+            contact_person: data.contact_person,
+            id: data.id
         }
     }).then(result => {
         callback(null, result);

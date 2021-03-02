@@ -6,6 +6,7 @@ const AWS = require('aws-sdk');
 const nodemailer = require('nodemailer');
 const Supplier = require('../models/supplier');
 const HelpProyect = require('../models/helpProyect');
+const Direction = require('../models/direction');
 
 const SES_CONFIG = {
     accessKeyId: 'AKIA3WGAH3552HY4WGUD',
@@ -46,14 +47,7 @@ let sendEmail = (recipientEmail, name) => {
 
 let sendTemplateEmail = (data) => {
     // console.log(sendTemplateEmail("Cristopher.lizandro.11@gmail.com"));
-
-    if (!data.cupon) {
-        data.cupon = '';
-    }
-    if (!data.coment) {
-        data.coment = '';
-    }
-
+    
     let params = {
         Source: 'Admin Compralocal <admin@compralocal.pe>',
         Template: data.template,
@@ -67,7 +61,6 @@ let sendTemplateEmail = (data) => {
     return AWS_SES.sendTemplatedEmail(params).promise();
 };
 
-
 orderModel.getAll = (callback) => {
     Order.findAll({
         include: [{
@@ -76,7 +69,7 @@ orderModel.getAll = (callback) => {
                 model: Product,
                 include: [Supplier]
             }]
-        }, User, HelpProyect],
+        }, User, HelpProyect, Direction],
         order: [
             ['id', 'DESC']
         ]
@@ -98,7 +91,8 @@ orderModel.insert = (data, callback) => {
         cupon: data.cupon,
         coment: data.coment,
         userId: data.userId,
-        helpproyectId: data.helpProyectId
+        helpproyectId: data.helpProyectId,
+        directionId: data.directionId
     }).then(result => {
         callback(null, result.get());
     });
@@ -121,6 +115,7 @@ orderModel.update = (data, callback) => {
         obj.coment = data.coment;
         obj.userId = data.userId;
         obj.helpproyectId = data.helpProyectId;
+        obj.directionId = data.directionId;
         obj.save().then(result => callback(null, result.get()));
     });
 };
@@ -146,7 +141,7 @@ orderModel.findById = (id, callback) => {
                 model: Product,
                 include: [Supplier]
             }]
-        }, User, HelpProyect]
+        }, User, HelpProyect, Direction]
     }).then(result => {
         callback(null, result);
     });
@@ -163,7 +158,7 @@ orderModel.findByUser = (id, callback) => {
                 model: Product,
                 include: [Supplier]
             }]
-        }, User, HelpProyect]
+        }, User, HelpProyect, Direction]
     }).then(result => {
         callback(null, result);
     });
@@ -171,6 +166,13 @@ orderModel.findByUser = (id, callback) => {
 
 orderModel.sendUserMail = async (data, callback) => {
     // console.log("dataUser", data);
+    if (!data.cupon) {
+        data.cupon = '';
+    }
+    if (!data.coment) {
+        data.coment = '';
+    }
+
     data.template = "CLMailUserTemplate";
     data.sendMail = data.user.email;
     if (data.paymentMethod == 'culqi') {
@@ -184,6 +186,14 @@ orderModel.sendUserMail = async (data, callback) => {
 }
 
 orderModel.sendAdminMail = async (data, callback) => {
+
+    if (!data.cupon) {
+        data.cupon = '';
+    }
+    if (!data.coment) {
+        data.coment = '';
+    }
+
     data.template = "CLMailAdminTemplate";
     data.sendMail = "admin@compralocal.pe";
 
@@ -203,14 +213,21 @@ orderModel.sendAdminMail = async (data, callback) => {
 
 orderModel.sendPagoPendienteMail = async (data, callback) => {
     // console.log("dataUser", data);
+    if (!data.cupon) {
+        data.cupon = '';
+    }
+    if (!data.coment) {
+        data.coment = '';
+    }
+
     data.template = "CLMailPagoPendienteTemplate";
     data.sendMail = data.user.email;
     if (data.paymentMethod == 'transferencia') {
         data.paymentMethodString = 'transferencia bancaria';
-        data.paymentAccount = 'CTA. CTE. Soles: 193-25849940-48 / CCI: 00219300258499404818';
+        data.paymentAccount = 'BCP CTA. CTE. Soles: 193-25849940-48 / CCI: 00219300258499404818';
     } else {
         data.paymentMethodString = 'YAPE';
-        data.paymentAccount = '999-888-777';
+        data.paymentAccount = '973-853-443';
     }
     sendTemplateEmail(data).then(res => {
         callback(null, res);
@@ -222,6 +239,21 @@ orderModel.sendThanksUserMail = async (data, callback) => {
     data.template = "CLMailThanksUserTemplate";
     data.sendMail = data.user.email;
     sendTemplateEmail(data).then(res => {
+        callback(null, res);
+    });
+}
+
+orderModel.sendNewSuppMail = async (data, callback) => {
+    // console.log("dataUser", data);
+
+    dataSend = {
+        template: "CLMailNewSuppTemplate",
+        sendMail: data.email,
+        token: data.token,
+        contact_person: data.contact_person
+    }
+    // console.log(dataSend);
+    sendTemplateEmail(dataSend).then(res => {
         callback(null, res);
     });
 }

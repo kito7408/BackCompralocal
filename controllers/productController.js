@@ -3,7 +3,6 @@ var Op = Sequelize.Op;
 
 const Product = require('../models/product');
 const Category = require('../models/category');
-const SubCategory = require('../models/subCategory');
 const Supplier = require('../models/supplier');
 const Cart = require('../models/cart');
 
@@ -14,10 +13,6 @@ productModel.getAll = (callback) => {
         include: [{
             model: Category,
             as: 'category'
-        },
-        {
-            model: SubCategory,
-            as: 'subcategory'
         },
             Supplier],
         where: {
@@ -36,6 +31,9 @@ productModel.insert = (data, callback) => {
     if (data.priceOffer == 'undefined') {
         data.priceOffer = '0';
     }
+    if (data.description == 'undefined') {
+        data.description = null;
+    }
     console.log(data);
     Product.create({
         name: data.name,
@@ -44,7 +42,6 @@ productModel.insert = (data, callback) => {
         numSellOnWeek: data.numSellOnWeek,
         isTrent: data.isTrent,
         categoryId: data.categoryId,
-        subcategoryId: data.subcategoryId,
         supplierId: data.supplierId,
         isOffer: data.isOffer,
         priceOffer: data.priceOffer,
@@ -96,7 +93,6 @@ productModel.update = (data, callback) => {
                 numSellOnWeek: data.numSellOnWeek,
                 isTrent: data.isTrent,
                 categoryId: data.categoryId,
-                subcategoryId: data.subcategoryId,
                 supplierId: data.supplierId,
                 isOffer: data.isOffer,
                 priceOffer: data.priceOffer,
@@ -142,10 +138,6 @@ productModel.findById = (id, callback) => {
             model: Category,
             as: 'category'
         },
-        {
-            model: SubCategory,
-            as: 'subcategory'
-        },
             Supplier],
         where: {
             id: id,
@@ -165,10 +157,6 @@ productModel.findByCategory = (id, callback) => {
             model: Category,
             as: 'category'
         },
-        {
-            model: SubCategory,
-            as: 'subcategory'
-        },
             Supplier],
         where: {
             categoryId: id,
@@ -182,38 +170,34 @@ productModel.findByCategory = (id, callback) => {
     });
 }
 
-productModel.findBySubCategory = (id, callback) => {
-    Product.findAll({
-        include: [{
-            model: Category,
-            as: 'category'
-        },
-        {
-            model: SubCategory,
-            as: 'subcategory'
-        },
-            Supplier],
-        where: {
-            subCategoryId: id,
-            available: true
-        },
-        order: [
-            ['id', 'DESC']
-        ]
-    }).then(result => {
-        callback(null, result);
-    });
-}
+// productModel.findBySubCategory = (id, callback) => {
+//     Product.findAll({
+//         include: [{
+//             model: Category,
+//             as: 'category'
+//         },
+//         {
+//             model: SubCategory,
+//             as: 'subcategory'
+//         },
+//             Supplier],
+//         where: {
+//             subCategoryId: id,
+//             available: true
+//         },
+//         order: [
+//             ['id', 'DESC']
+//         ]
+//     }).then(result => {
+//         callback(null, result);
+//     });
+// }
 
 productModel.findBySupplier = (id, callback) => {
     Product.findAll({
         include: [{
             model: Category,
             as: 'category'
-        },
-        {
-            model: SubCategory,
-            as: 'subcategory'
         },
             Supplier],
         where: {
@@ -233,10 +217,6 @@ productModel.findBySearch = (searchText, callback) => {
         include: [{
             model: Category,
             as: 'category'
-        },
-        {
-            model: SubCategory,
-            as: 'subcategory'
         },
             Supplier],
         where: {
@@ -259,10 +239,6 @@ productModel.sortByBuys = (callback) => {
             model: Category,
             as: 'category'
         },
-        {
-            model: SubCategory,
-            as: 'subcategory'
-        },
             Supplier],
         where: {
             available: true
@@ -278,15 +254,6 @@ productModel.sortByBuys = (callback) => {
 productModel.updateSales = async (dataProds, callback) => {
     await dataProds.forEach(element => {
         Product.findOne({
-            include: [{
-                model: Category,
-                as: 'category'
-            },
-            {
-                model: SubCategory,
-                as: 'subcategory'
-            },
-                Supplier],
             where: {
                 id: element.prodId
             }
@@ -299,10 +266,6 @@ productModel.updateSales = async (dataProds, callback) => {
         include: [{
             model: Category,
             as: 'category'
-        },
-        {
-            model: SubCategory,
-            as: 'subcategory'
         },
             Supplier],
         where: {

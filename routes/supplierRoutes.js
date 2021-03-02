@@ -34,57 +34,73 @@ module.exports = function (app) {
         })
     });
 
+    app.put('/suppliers/coded', (req, res) => {
+        Supplier.findByCoded(req.body, (err, data) => {
+            res.json(data);
+        })
+    });
+
     app.post('/suppliers', upload.single('image'), (req, res) => {
-        console.log(req.body);
-        const now = new Date().toISOString();
-        const date = now.replace(/:/g, '-');
-        const filename = date + req.file.originalname;
+        // console.log(req.body);
 
-        var params = {
-            Bucket: 'compralocal-images/suppliers',
-            Key: filename,
-            Body: req.file.buffer
-        }
+        var filename = '';
 
-        s3.upload(params, (error, data) => {
-            if(error){
-                res.status(500).json({
-                    success: false,
-                    msg: 'Error',
-                    err: error
-                })
+        if (req.file) {
+            const now = new Date().toISOString();
+            const date = now.replace(/:/g, '-');
+            filename = date + req.file.originalname;
+
+            var params = {
+                Bucket: 'compralocal-images/suppliers',
+                Key: filename,
+                Body: req.file.buffer
             }
-    
-            const suppData = {
-                name: req.body.name,
-                business_name: req.body.business_name,
-                ruc: req.body.ruc,
-                image: filename,
-                description: req.body.description,
-                bank: req.body.bank,
-                account_number: req.body.account_number,
-                email: req.body.email,
-                contact_person: req.body.contact_person,
-                dni_contact: req.body.dni_contact,
-                phone_contact: req.body.phone_contact,
-                fiscal_address: req.body.fiscal_address
-            };
 
-            Supplier.insert(suppData, (err, data) => {
-                if (data) {
-                    res.json({
-                        success: true,
-                        msg: 'Supplier Inserted',
-                        data: data
-                    })
-                } else {
+            s3.upload(params, (error, data) => {
+                if(error){
                     res.status(500).json({
                         success: false,
                         msg: 'Error',
-                        err: err
+                        err: error
                     })
                 }
-            });
+            });            
+        } else {
+            filename = null;
+        }
+
+        const suppData = {
+            name: req.body.name,
+            business_name: req.body.business_name,
+            ruc: req.body.ruc,
+            image: filename,
+            description: req.body.description,
+            bank: req.body.bank,
+            account_number: req.body.account_number,
+            email: req.body.email,
+            contact_person: req.body.contact_person,
+            dni_contact: req.body.dni_contact,
+            phone_contact: req.body.phone_contact,
+            departamento: req.body.departamento,
+            provincia: req.body.provincia,
+            distrito: req.body.distrito,
+            direccion: req.body.direccion
+        };
+
+        Supplier.insert(suppData, (err, data) => {
+            if (data) {
+                res.json({
+                    success: true,
+                    msg: 'Supplier Inserted',
+                    data: data
+                })
+            } else {
+                res.status(500).json({
+                    success: false,
+                    msg: 'Error',
+                    err: err
+                })
+            }
         });
     });
 
@@ -103,7 +119,10 @@ module.exports = function (app) {
             contact_person: req.body.contact_person,
             dni_contact: req.body.dni_contact,
             phone_contact: req.body.phone_contact,
-            fiscal_address: req.body.fiscal_address
+            departamento: req.body.departamento,
+            provincia: req.body.provincia,
+            distrito: req.body.distrito,
+            direccion: req.body.direccion
         };
 
         Supplier.update(suppData, (err, data) => {

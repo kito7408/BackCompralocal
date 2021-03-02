@@ -1,3 +1,4 @@
+const Direction = require('../models/direction');
 const User = require('../models/user');
 const UserType = require('../models/userType');
 
@@ -5,7 +6,7 @@ let userModel = {};
 
 userModel.getAll = (callback) => {
     User.findAll({
-        include: [UserType]
+        include: [UserType, Direction]
     }).then(users => {
         callback(null, users);
     });
@@ -70,7 +71,7 @@ userModel.findById = (id, callback) => {
         where: {
             id: id
         },
-        include: [UserType]
+        include: [UserType, Direction]
     }).then(result => {
         callback(null, result);
     });
@@ -81,7 +82,7 @@ userModel.findByEmail = (email, callback) => {
         where: {
             email: email
         },
-        include: [UserType]
+        include: [UserType, Direction]
     }).then(result => {
         callback(null, result);
     });
@@ -93,7 +94,7 @@ userModel.login = (userData, callback) => {
             email: userData.email,
             password: userData.password
         },
-        include: [UserType]
+        include: [UserType, Direction]
     }).then(result => {
         callback(null, result);
     });

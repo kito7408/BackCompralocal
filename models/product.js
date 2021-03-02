@@ -1,7 +1,7 @@
 var Sequelize = require('sequelize');
 var connection = require('../connection');
 var Category = require('./category');
-var SubCategory = require('./subCategory');
+// var SubCategory = require('./subCategory');
 var Supplier = require('./supplier');
 
 const Product = connection.define('product', {
@@ -11,7 +11,7 @@ const Product = connection.define('product', {
 	},
 	description: {
 		type: Sequelize.TEXT,
-		allowNull: false
+		allowNull: true
 	},
 	price: {
 		type: Sequelize.DOUBLE,
@@ -37,7 +37,7 @@ const Product = connection.define('product', {
 		type: Sequelize.TEXT,
 		allowNull: true
 	},
-	numSellOnWeek: {
+	numSellOnWeek: {		//de momento no se resetea cada semana
 		type: Sequelize.DOUBLE,
 		allowNull: false
 	},
@@ -47,11 +47,13 @@ const Product = connection.define('product', {
 	},
 	isOffer: {
 		type: Sequelize.BOOLEAN,
-		allowNull: true
+		allowNull: true,
+		defaultValue: false
 	},
 	priceOffer: {
 		type: Sequelize.DOUBLE,
-		allowNull: true
+		allowNull: true,
+		defaultValue: 0
 	},
 	unit: {
 		type: Sequelize.STRING,
@@ -68,13 +70,6 @@ Product.belongsTo(Category, {
 		allowNull: false
 	},
 	as: 'category'
-});
-
-Product.belongsTo(SubCategory, {
-	foreignKey: {
-		allowNull: false
-	},
-	as: 'subcategory'
 });
 
 Product.belongsTo(Supplier, {

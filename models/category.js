@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 var connection = require('../connection');
-var SubCategory = require('./subCategory');
+// var SubCategory = require('./subCategory');
 
 const Category = connection.define('category', {
 	name: {
@@ -9,6 +9,6 @@ const Category = connection.define('category', {
 	}
 });
 
-Category.hasMany(SubCategory);
+// Category.hasMany(SubCategory);
 
 module.exports = Category;

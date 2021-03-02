@@ -5,7 +5,8 @@ const fetch = require('node-fetch');
 var Sequelize = require('sequelize');
 var Op = Sequelize.Op;
 
-const privatekey = 'sk_test_f781878eda2badcd';
+// const privatekey = 'sk_test_f781878eda2badcd';   //mia
+const privatekey = 'sk_live_lVuRy3YvwDnjOz6m';
 let cartModel = {};
 
 cartModel.getAll = (callback) => {
@@ -258,6 +259,54 @@ cartModel.culqi = async (data, callback) => {
     // console.log("data llegada", data);
 
     const response = await fetch('https://api.culqi.com/v2/charges', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + privatekey
+        },
+        body: JSON.stringify(data)
+    });
+    const myJson = await response.json();
+
+    // console.log("json", myJson);
+    callback(null, myJson);
+};
+
+cartModel.culqiCustomer = async (data, callback) => {
+    // console.log("customer ",data);
+    const response = await fetch('https://api.culqi.com/v2/customers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + privatekey
+        },
+        body: JSON.stringify(data)
+    });
+    const myJson = await response.json();
+
+    // console.log("json", myJson);
+    callback(null, myJson);
+};
+
+cartModel.culqiCard = async (data, callback) => {
+    // console.log("card ",data);
+    const response = await fetch('https://api.culqi.com/v2/cards', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + privatekey
+        },
+        body: JSON.stringify(data)
+    });
+    const myJson = await response.json();
+
+    // console.log("json", myJson);
+    callback(null, myJson);
+};
+
+cartModel.culqiSubscription = async (data, callback) => {
+    // console.log("sub ",data);
+    const response = await fetch('https://api.culqi.com/v2/subscriptions', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

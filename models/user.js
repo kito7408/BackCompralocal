@@ -1,6 +1,7 @@
 var Sequelize = require('sequelize');
 var connection = require('../connection');
 var UserType = require('./userType');
+var Direction = require('./direction');
 
 const User = connection.define('user', {
 	name: {
@@ -32,22 +33,6 @@ const User = connection.define('user', {
 		type: Sequelize.STRING,
 		allowNull: false
 	},
-	direccion: {
-		type: Sequelize.STRING,
-		allowNull: false
-	},
-	provincia: {
-		type: Sequelize.STRING,
-		allowNull: false
-	},
-	distrito: {
-		type: Sequelize.STRING,
-		allowNull: false
-	},
-	ciudad: {
-		type: Sequelize.STRING,
-		allowNull: false
-	},
 	phoneFijo: {
 		type: Sequelize.STRING,
 		allowNull: true
@@ -63,5 +48,7 @@ User.belongsTo(UserType, {
 		allowNull: false
 	}
 });
+
+User.hasMany(Direction);
 
 module.exports = User;
