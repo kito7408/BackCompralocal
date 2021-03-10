@@ -28,6 +28,12 @@ module.exports = function (app) {
         });
     });
 
+    app.get('/post/except/:id', (req, res) => {
+        Post.findExcept(req.params.id, (err, data) => {
+            res.json(data);
+        });
+    });
+
     app.get('/post/last', (req, res) => {
         Post.findLast((err, data) => {
             res.json(data);
@@ -66,6 +72,7 @@ module.exports = function (app) {
                 title: req.body.title,
                 content: req.body.content,
                 image: filename,
+                author: req.body.author,
                 userId: req.body.userId
             };
 
@@ -88,12 +95,13 @@ module.exports = function (app) {
     });
 
     app.put('/post/:id', (req, res) => {
-        console.log(req.body)
+        // console.log(req.body)
         const postData = {
             id: req.body.id,
             title: req.body.title,
             content: req.body.content,
             image: req.body.image,
+            author: req.body.author,
             userId: req.body.userId
         };
 

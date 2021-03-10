@@ -14,6 +14,10 @@ const Post = connection.define('post', {
 	image: {
 		type: Sequelize.TEXT,
 		allowNull: false
+	},
+	author: {
+		type: Sequelize.STRING,
+		allowNull: false
 	}
 });
 

@@ -1,3 +1,6 @@
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
+
 const User = require('../models/user');
 const Post = require('../models/post')
 
@@ -20,6 +23,7 @@ postModel.insert = (data, callback) => {
         title: data.title,
         content: data.content,
         image: data.image,
+        author: data.author,
         userId: data.userId
     }).then(result => callback(null, result.get()));
 };
@@ -33,6 +37,7 @@ postModel.update = (data, callback) => {
         obj.title = data.title;
         obj.content = data.content;
         obj.image = data.image;
+        obj.author = data.author;
         obj.userId = data.userId;
         obj.save().then(result => callback(null, result.get()));
     });
@@ -77,6 +82,22 @@ postModel.findLast = (callback) => {
         order: [['id', 'DESC']]
     }).then(result => {
         callback(null, result[0]);
+    });
+}
+
+postModel.findExcept = (id_post, callback) => {
+    Post.findAll({
+        where: {
+            id: {
+                [Op.notLike]: id_post
+            }
+        },
+        include: [User],
+        order: [
+            ['id', 'DESC']
+        ]
+    }).then(result => {
+        callback(null, result);
     });
 }
 
