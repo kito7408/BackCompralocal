@@ -1,6 +1,7 @@
 const Direction = require('../models/direction');
 const User = require('../models/user');
 const UserType = require('../models/userType');
+const bcrypt = require('bcrypt');
 
 let userModel = {};
 
@@ -91,12 +92,19 @@ userModel.findByEmail = (email, callback) => {
 userModel.login = (userData, callback) => {
     User.findOne({
         where:{
-            email: userData.email,
-            password: userData.password
+            email: userData.email
+            // password: userData.password
         },
         include: [UserType, Direction]
-    }).then(result => {
-        callback(null, result);
+    }).then(user => {
+        bcrypt.compare(userData.password, user.password, function(err, match) {
+            // result == true
+            if (match) {
+                callback(null, user);
+            } else {
+                callback(err); 
+            }
+        });
     });
 }
 

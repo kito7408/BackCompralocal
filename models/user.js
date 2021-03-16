@@ -1,7 +1,8 @@
-var Sequelize = require('sequelize');
-var connection = require('../connection');
-var UserType = require('./userType');
-var Direction = require('./direction');
+const Sequelize = require('sequelize');
+const connection = require('../connection');
+const UserType = require('./userType');
+const Direction = require('./direction');
+const bcrypt = require('bcrypt');
 
 const User = connection.define('user', {
 	name: {
@@ -47,6 +48,21 @@ User.belongsTo(UserType, {
 	foreignKey: {
 		allowNull: false
 	}
+});
+
+User.beforeCreate(async (user, options) => {
+	const hashedPassword = await bcrypt.hash(user.password, 10);
+	user.password = hashedPassword;
+});
+
+User.beforeUpdate(async (user, options) => {
+	const hashedPassword = await bcrypt.hash(user.password, 10);
+	user.password = hashedPassword;
+});
+
+User.beforeSave(async (user, options) => {
+	const hashedPassword = await bcrypt.hash(user.password, 10);
+	user.password = hashedPassword;
 });
 
 User.hasMany(Direction);
