@@ -2,6 +2,8 @@ const Direction = require('../models/direction');
 const User = require('../models/user');
 const UserType = require('../models/userType');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const CONFIG = require('../config/config');
 
 let userModel = {};
 
@@ -97,12 +99,41 @@ userModel.login = (userData, callback) => {
         },
         include: [UserType, Direction]
     }).then(user => {
-        bcrypt.compare(userData.password, user.password, function(err, match) {
+        // console.log(userData);
+        bcrypt.compare(userData.password, user.dataValues.password, function(err, match) {
             // result == true
             if (match) {
-                callback(null, user);
+                jwt.sign(user.dataValues,CONFIG.SECRET_TOKEN, function(error, token) {
+                    if (error) {
+                        console.log(error);
+                        callback(error);
+                    } else {
+                        callback(null, {user, token});
+                    }
+                });
             } else {
+                console.log(err);
                 callback(err); 
+            }
+        });
+    });
+}
+
+
+userModel.loginSocialMedia = (email, callback) => {
+    User.findOne({
+        where:{
+            email: email
+        },
+        include: [UserType, Direction]
+    }).then(user => {
+        console.log(user);
+        jwt.sign(user.dataValues,CONFIG.SECRET_TOKEN, function(error, token) {
+            if (error) {
+                console.log(error);
+                callback(error);
+            } else {
+                callback(null, {user, token});
             }
         });
     });

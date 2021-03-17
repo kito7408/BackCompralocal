@@ -26,6 +26,9 @@ supplierModel.insert = (data, callback) => {
     if (data.account_number == 'undefined' || data.account_number == undefined) {
         data.account_number = null;
     }
+    if (data.cci_account_number == 'undefined' || data.cci_account_number == undefined) {
+        data.cci_account_number = null;
+    }
     if (data.dni_contact == 'undefined' || data.dni_contact == undefined) {
         data.dni_contact = null;
     }
@@ -38,6 +41,7 @@ supplierModel.insert = (data, callback) => {
         description: data.description,
         bank: data.bank,
         account_number: data.account_number,
+        cci_account_number: data.cci_account_number,
         email: data.email,
         contact_person: data.contact_person,
         dni_contact: data.dni_contact,
@@ -64,6 +68,7 @@ supplierModel.update = (data, callback) => {
         obj.description = data.description;
         obj.bank = data.bank;
         obj.account_number = data.account_number;
+        obj.cci_account_number = data.cci_account_number;
         obj.email = data.email;
         obj.contact_person = data.contact_person;
         obj.dni_contact = data.dni_contact;

@@ -31,7 +31,11 @@ const Supplier = connection.define('supplier', {
 		type: Sequelize.STRING,
 		allowNull: true
 	},
-	email: {					//correo dek contacto
+	cci_account_number: {
+		type: Sequelize.STRING,
+		allowNull: true
+	},
+	email: {					//correo de contacto
 		type: Sequelize.STRING,
 		allowNull: false
 	},

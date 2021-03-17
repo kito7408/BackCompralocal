@@ -41,8 +41,6 @@ module.exports = function (app) {
     });
 
     app.post('/suppliers', upload.single('image'), (req, res) => {
-        // console.log(req.body);
-
         var filename = '';
 
         if (req.file) {
@@ -77,6 +75,7 @@ module.exports = function (app) {
             description: req.body.description,
             bank: req.body.bank,
             account_number: req.body.account_number,
+            cci_account_number: req.body.cci_account_number,
             email: req.body.email,
             contact_person: req.body.contact_person,
             dni_contact: req.body.dni_contact,
@@ -115,6 +114,7 @@ module.exports = function (app) {
             description: req.body.description,
             bank: req.body.bank,
             account_number: req.body.account_number,
+            cci_account_number: req.body.cci_account_number,
             email: req.body.email,
             contact_person: req.body.contact_person,
             dni_contact: req.body.dni_contact,

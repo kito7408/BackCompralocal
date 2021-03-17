@@ -50,15 +50,17 @@ User.belongsTo(UserType, {
 	}
 });
 
-User.beforeCreate(async (user, options) => {
-	const hashedPassword = await bcrypt.hash(user.password, 10);
-	user.password = hashedPassword;
-});
+// User.beforeCreate(async (user, options) => {
+// 	console.log("create");
+// 	const hashedPassword = await bcrypt.hash(user.password, 10);
+// 	user.password = hashedPassword;
+// });
 
-User.beforeUpdate(async (user, options) => {
-	const hashedPassword = await bcrypt.hash(user.password, 10);
-	user.password = hashedPassword;
-});
+// User.beforeUpdate(async (user, options) => {
+// 	console.log("update");
+// 	const hashedPassword = await bcrypt.hash(user.password, 10);
+// 	user.password = hashedPassword;
+// });
 
 User.beforeSave(async (user, options) => {
 	const hashedPassword = await bcrypt.hash(user.password, 10);

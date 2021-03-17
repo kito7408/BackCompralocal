@@ -6,7 +6,11 @@ const bodyParser = require('body-parser');
 
 const port = process.env.PORT || 3000;
 
+const AuthToken = require('./middlewares/AuthToken');
+
 app.set('port', port);
+
+app.use(AuthToken);
 
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'))

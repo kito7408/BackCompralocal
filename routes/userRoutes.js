@@ -129,4 +129,23 @@ module.exports = function (app) {
             }
         })
     });
+
+    app.post('/users/login/socialmedia', (req, res) => {
+
+        User.loginSocialMedia(req.body.email, (err, data) => {
+            if (data) {
+                res.json({
+                    success: true,
+                    msg: 'Logged',
+                    data: data
+                })
+            } else {
+                res.status(500).json({
+                    success: false,
+                    msg: 'Error',
+                    err: err
+                })
+            }
+        })
+    });
 }
