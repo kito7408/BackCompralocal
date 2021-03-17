@@ -13,7 +13,7 @@ app.set('port', port);
 
 app.use(cors());
 
-app.use(AuthToken);
+// app.use(AuthToken);
 
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'))
