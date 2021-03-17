@@ -1,14 +1,17 @@
 const express = require('express');
-const app = express();
-
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const AuthToken = require('./middlewares/AuthToken');
+const cors = require('cors');
+
+
+const app = express();
 
 const port = process.env.PORT || 3000;
 
-const AuthToken = require('./middlewares/AuthToken');
-
 app.set('port', port);
+
+app.use(cors());
 
 app.use(AuthToken);
 
@@ -19,15 +22,15 @@ app.use(bodyParser.json());
 // app.use(bodyParser.json({limit: '100mb'}));
 // app.use(bodyParser.urlencoded({limit: '100mb'}));
 
-app.use(function (req, res, next) {
+// app.use(function (req, res, next) {
 
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+//     res.setHeader('Access-Control-Allow-Credentials', true);
 
-    next();
-});
+//     next();
+// });
 
 //routes
 require('./routes/userRoutes')(app);
