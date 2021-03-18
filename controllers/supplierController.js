@@ -3,7 +3,11 @@ const Supplier = require('../models/supplier');
 let supplierModel = {};
 
 supplierModel.getAll = (callback) => {
-    Supplier.findAll().then(result => {
+    Supplier.findAll({
+        where: {
+            available: true
+        }
+    }).then(result => {
         callback(null, result);
     });
 };
@@ -49,7 +53,8 @@ supplierModel.insert = (data, callback) => {
         departamento: data.departamento,
         provincia: data.provincia,
         distrito: data.distrito,
-        direccion: data.direccion
+        direccion: data.direccion,
+        available: data.available
     }).then(result => {
         callback(null, result.get());
     });
@@ -77,6 +82,7 @@ supplierModel.update = (data, callback) => {
         obj.provincia = data.provincia;
         obj.distrito = data.distrito;
         obj.direccion = data.direccion;
+        obj.available = data.available;
         obj.save().then(result => callback(null, result.get()));
     });
 };

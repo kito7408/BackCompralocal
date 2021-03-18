@@ -83,7 +83,8 @@ module.exports = function (app) {
             departamento: req.body.departamento,
             provincia: req.body.provincia,
             distrito: req.body.distrito,
-            direccion: req.body.direccion
+            direccion: req.body.direccion,
+            available: req.body.available
         };
 
         Supplier.insert(suppData, (err, data) => {
@@ -122,7 +123,8 @@ module.exports = function (app) {
             departamento: req.body.departamento,
             provincia: req.body.provincia,
             distrito: req.body.distrito,
-            direccion: req.body.direccion
+            direccion: req.body.direccion,
+            available: req.body.available
         };
 
         Supplier.update(suppData, (err, data) => {

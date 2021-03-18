@@ -66,6 +66,11 @@ const Supplier = connection.define('supplier', {
 	direccion: {
 		type: Sequelize.STRING,
 		allowNull: false
+	},
+	available: {
+		type: Sequelize.BOOLEAN,
+		allowNull: false,
+		defaultValue: false
 	}
 });
 
