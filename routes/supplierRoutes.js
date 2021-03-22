@@ -7,12 +7,12 @@ const s3 = new AWS.S3({
 });
 
 const storage = multer.memoryStorage({
-    destination: function(req, file, callback) {
+    destination: function (req, file, callback) {
         callback(null, '')
     }
 });
 
-const upload = multer({storage: storage});
+const upload = multer({ storage: storage });
 
 module.exports = function (app) {
 
@@ -40,38 +40,53 @@ module.exports = function (app) {
         })
     });
 
-    app.post('/suppliers', upload.single('image'), (req, res) => {
-        var filename = '';
+    app.post('/suppliers', upload.array('image'), async (req, res) => {
+        var pathImgs = [];
 
-        if (req.file) {
+        if (req.files) {
             const now = new Date().toISOString();
             const date = now.replace(/:/g, '-');
-            filename = date + req.file.originalname;
+            // filename = date + req.file.originalname;
 
-            var params = {
-                Bucket: 'compralocal-images/suppliers',
-                Key: filename,
-                Body: req.file.buffer
-            }
+            const prodImages = req.files;
 
-            s3.upload(params, (error, data) => {
-                if(error){
-                    res.status(500).json({
-                        success: false,
-                        msg: 'Error',
-                        err: error
-                    })
+            await prodImages.forEach(element => {
+
+                const filename = date + element.originalname;
+                pathImgs.push(filename);
+                var params = {
+                    Bucket: 'compralocal-images/suppliers',
+                    Key: filename,
+                    Body: element.buffer
                 }
-            });            
+
+                s3.upload(params, (error, data) => {
+                    if (error) {
+                        res.status(500).json({
+                            success: false,
+                            msg: 'Error',
+                            err: error
+                        })
+                    }
+                });
+            });
         } else {
-            filename = null;
+            pathImgs.push(null);
+            pathImgs.push(null);
+        }
+
+        if (req.body.available == 'true') {
+            req.body.available = true;
+        } else {
+            req.body.available = false;
         }
 
         const suppData = {
             name: req.body.name,
             business_name: req.body.business_name,
             ruc: req.body.ruc,
-            image: filename,
+            image: pathImgs[0],
+            image_person: pathImgs[1],
             description: req.body.description,
             bank: req.body.bank,
             account_number: req.body.account_number,
@@ -104,14 +119,58 @@ module.exports = function (app) {
         });
     });
 
-    app.put('/suppliers/:id', (req, res) => {
+    app.put('/suppliers/:id', upload.array('image'), async (req, res) => {
+        var img1 = '';
+        var img2 = '';
+
+        if (req.files && (req.body.changeImg1 || req.body.changeImg2)) {
+            const now = new Date().toISOString();
+            const date = now.replace(/:/g, '-');
+            // filename = date + req.file.originalname;
+
+            const prodImages = req.files;
+
+            await prodImages.forEach(element => {
+
+                const filename = date + element.originalname;
+
+                if (req.body.changeImg1 == 'true' && img1 == '') {
+                    img1 = filename;
+                } else if (req.body.changeImg2 == 'true' && img2 == '') {
+                    img2 = filename;
+                }
+                
+                var params = {
+                    Bucket: 'compralocal-images/suppliers',
+                    Key: filename,
+                    Body: element.buffer
+                }
+
+                s3.upload(params, (error, data) => {
+                    if (error) {
+                        res.status(500).json({
+                            success: false,
+                            msg: 'Error',
+                            err: error
+                        })
+                    }
+                });
+            });
+        }
+
+        if (req.body.available == 'true') {
+            req.body.available = true;
+        } else {
+            req.body.available = false;
+        }
 
         const suppData = {
             id: req.body.id,
             name: req.body.name,
             business_name: req.body.business_name,
             ruc: req.body.ruc,
-            image: req.file.path,
+            image: img1,
+            image_person: img2,
             description: req.body.description,
             bank: req.body.bank,
             account_number: req.body.account_number,

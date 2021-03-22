@@ -14,7 +14,7 @@ supplierModel.getAll = (callback) => {
 
 
 supplierModel.insert = (data, callback) => {
-    
+
     if (data.business_name == 'undefined' || data.business_name == undefined) {
         data.business_name = null;
     }
@@ -36,12 +36,13 @@ supplierModel.insert = (data, callback) => {
     if (data.dni_contact == 'undefined' || data.dni_contact == undefined) {
         data.dni_contact = null;
     }
-    
+
     Supplier.create({
         name: data.name,
         business_name: data.business_name,
         ruc: data.ruc,
         image: data.image,
+        image_person: data.image_person,
         description: data.description,
         bank: data.bank,
         account_number: data.account_number,
@@ -69,7 +70,6 @@ supplierModel.update = (data, callback) => {
         obj.name = data.name;
         obj.business_name = data.business_name;
         obj.ruc = data.ruc;
-        obj.image = data.image;
         obj.description = data.description;
         obj.bank = data.bank;
         obj.account_number = data.account_number;
@@ -83,6 +83,15 @@ supplierModel.update = (data, callback) => {
         obj.distrito = data.distrito;
         obj.direccion = data.direccion;
         obj.available = data.available;
+
+        if (data.image != '') {
+            obj.image = data.image;
+        }
+
+        if (data.image_person != '') {
+            obj.image_person = data.image_person;
+        }
+
         obj.save().then(result => callback(null, result.get()));
     });
 };

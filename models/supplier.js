@@ -19,6 +19,10 @@ const Supplier = connection.define('supplier', {
 		type: Sequelize.TEXT,
 		allowNull: true
 	},
+	image_person: {						//imagen persona
+		type: Sequelize.TEXT,
+		allowNull: true
+	},
 	description: {					//cuentanos tu historia
 		type: Sequelize.TEXT,
 		allowNull: true
