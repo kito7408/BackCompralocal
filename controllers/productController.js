@@ -14,7 +14,12 @@ productModel.getAll = (callback) => {
             model: Category,
             as: 'category'
         },
-            Supplier],
+        {
+            model: Supplier,
+            where: {
+                available: true
+            }
+        }],
         where: {
             available: true
         },
@@ -122,7 +127,7 @@ productModel.delete = (id, callback) => {
                 await cartItems.forEach(element => {
                     if (!element.isBuyed) {
                         element.isBuyed = true;
-                        element.save();   
+                        element.save();
                     }
                 });
                 callback(null, result.get());
@@ -137,8 +142,13 @@ productModel.findById = (id, callback) => {
         include: [{
             model: Category,
             as: 'category'
-        },
-            Supplier],
+        }, 
+        {
+            model: Supplier,
+            where: {
+                available: true
+            }
+        }],
         where: {
             id: id,
             available: true
@@ -157,7 +167,12 @@ productModel.findByCategory = (id, callback) => {
             model: Category,
             as: 'category'
         },
-            Supplier],
+        {
+            model: Supplier,
+            where: {
+                available: true
+            }
+        }],
         where: {
             categoryId: id,
             available: true
@@ -199,7 +214,12 @@ productModel.findBySupplier = (id, callback) => {
             model: Category,
             as: 'category'
         },
-            Supplier],
+        {
+            model: Supplier,
+            where: {
+                available: true
+            }
+        }],
         where: {
             supplierId: id,
             available: true
@@ -218,7 +238,12 @@ productModel.findBySearch = (searchText, callback) => {
             model: Category,
             as: 'category'
         },
-            Supplier],
+        {
+            model: Supplier,
+            where: {
+                available: true
+            }
+        }],
         where: {
             name: {
                 [Op.like]: '%' + searchText + '%'
@@ -239,7 +264,12 @@ productModel.sortByBuys = (callback) => {
             model: Category,
             as: 'category'
         },
-            Supplier],
+        {
+            model: Supplier,
+            where: {
+                available: true
+            }
+        }],
         where: {
             available: true
         },
