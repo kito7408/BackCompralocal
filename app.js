@@ -49,6 +49,7 @@ require('./routes/directionRoutes')(app);
 require('./routes/pageReviewRoutes')(app);
 require('./routes/infoContactoRoutes')(app);
 require('./routes/culqiEventRoutes')(app);
+require('./routes/productModelRoutes')(app);
 
 
 app.listen(app.get('port'), () => {

@@ -3,6 +3,7 @@ var connection = require('../connection');
 var Category = require('./category');
 // var SubCategory = require('./subCategory');
 var Supplier = require('./supplier');
+var ProductModel = require('./productModel');
 
 const Product = connection.define('product', {
 	name: {
@@ -77,5 +78,7 @@ Product.belongsTo(Supplier, {
 		allowNull: false
 	}
 });
+
+Product.hasMany(ProductModel);
 
 module.exports = Product;

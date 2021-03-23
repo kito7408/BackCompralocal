@@ -5,6 +5,7 @@ const Product = require('../models/product');
 const Category = require('../models/category');
 const Supplier = require('../models/supplier');
 const Cart = require('../models/cart');
+const ProdMod = require('../models/productModel');
 
 let productModel = {};
 
@@ -19,7 +20,7 @@ productModel.getAll = (callback) => {
             where: {
                 available: true
             }
-        }],
+        }, ProdMod],
         where: {
             available: true
         },
@@ -148,7 +149,7 @@ productModel.findById = (id, callback) => {
             where: {
                 available: true
             }
-        }],
+        }, ProdMod],
         where: {
             id: id,
             available: true
@@ -172,7 +173,7 @@ productModel.findByCategory = (id, callback) => {
             where: {
                 available: true
             }
-        }],
+        }, ProdMod],
         where: {
             categoryId: id,
             available: true
@@ -219,7 +220,7 @@ productModel.findBySupplier = (id, callback) => {
             where: {
                 available: true
             }
-        }],
+        }, ProdMod],
         where: {
             supplierId: id,
             available: true
@@ -243,7 +244,7 @@ productModel.findBySearch = (searchText, callback) => {
             where: {
                 available: true
             }
-        }],
+        }, ProdMod],
         where: {
             name: {
                 [Op.like]: '%' + searchText + '%'
@@ -269,7 +270,7 @@ productModel.sortByBuys = (callback) => {
             where: {
                 available: true
             }
-        }],
+        }, ProdMod],
         where: {
             available: true
         },
