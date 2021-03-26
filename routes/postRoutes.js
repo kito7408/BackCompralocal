@@ -91,7 +91,7 @@ module.exports = function (app) {
                     })
                 }
             });
-        })
+        });
     });
 
     app.put('/post/:id', (req, res) => {

@@ -5,6 +5,14 @@ const ProductModel = connection.define('productModel', {
 	name: {
 		type: Sequelize.STRING,
 		allowNull: false
+	},
+	image: {
+		type: Sequelize.TEXT,
+		allowNull: false
+	},
+	prodImgNum: {
+		type: Sequelize.STRING,
+		allowNull: false
 	}
 });
 

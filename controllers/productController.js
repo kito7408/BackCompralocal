@@ -40,7 +40,7 @@ productModel.insert = (data, callback) => {
     if (data.description == 'undefined') {
         data.description = null;
     }
-    console.log(data);
+    // console.log(data);
     Product.create({
         name: data.name,
         description: data.description,

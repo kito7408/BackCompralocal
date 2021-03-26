@@ -12,6 +12,8 @@ prodModModel.getAll = (callback) => {
 prodModModel.insert = (data, callback) => {
     ProdMod.create({
         name: data.name,
+        image: data.image,
+        prodImgNum: data.prodImgNum,
         productId: data.productId
     }).then(result => {
         callback(null, result.get());
@@ -25,6 +27,8 @@ prodModModel.update = (data, callback) => {
         }
     }).then(obj => {
         obj.name = data.name;
+        obj.image = data.image;
+        obj.prodImgNum = data.prodImgNum;
         obj.productId = data.productId;
         obj.save().then(result => callback(null, result.get()));
     });
