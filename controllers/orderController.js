@@ -195,7 +195,7 @@ orderModel.sendAdminMail = async (data, callback) => {
     }
 
     data.template = "CLMailAdminTemplate";
-    data.sendMail = "admin@compralocal.pe";
+    data.sendMail = "compralocal@compralocal.pe";
 
     data.carts.forEach(element => {
         element.helpProyPrice = element.totalPrice * 0.01;
