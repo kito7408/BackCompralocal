@@ -37,10 +37,11 @@ let sendEmail = (sendToEmail, subject, message) => {
 
 culqiEventsFunctions.detectEvent = (data, callback) => {
 
+    var dataStr = JSON.stringify(data);
     var mailDest = 'compralocal@compralocal.pe';
     var subject = '';
     var message = `La información retornada por culqi es: 
-    ${data}
+    ${dataStr}
     `;
     var sendMail = false;
 
