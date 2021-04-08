@@ -1,29 +1,5 @@
 const Product = require('../controllers/productController');
-const multer = require('multer');
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3({
-    accessKeyId: 'AKIA3WGAH3554DJMT2ZM',
-    secretAccessKey: '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'
-});
-
-// const storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         cb(null, './uploads/');
-//     },
-//     filename: function(req, file, cb) {
-//         const now = new Date().toISOString();
-//         const date = now.replace(/:/g, '-');
-//         cb(null, date + file.originalname);
-//     }
-// });
-
-const storage = multer.memoryStorage({
-    destination: function (req, file, callback) {
-        callback(null, '')
-    }
-});
-
-const upload = multer({ storage: storage });
+const s3Controller = require('../controllers/s3Controller');
 
 module.exports = function (app) {
 
@@ -69,7 +45,7 @@ module.exports = function (app) {
         })
     });
 
-    app.post('/products', upload.array('image'), async (req, res) => {
+    app.post('/products', s3Controller.upload.array('image'), async (req, res) => {
         // console.log(req.files);
 
         const now = new Date().toISOString();
@@ -90,7 +66,7 @@ module.exports = function (app) {
                 Body: element.buffer
             }
 
-            s3.upload(params, (error, data) => {
+            s3Controller.s3.upload(params, (error, data) => {
                 if (error) {
                     res.status(500).json({
                         success: false,
@@ -157,7 +133,7 @@ module.exports = function (app) {
         })
     });
 
-    app.put('/products/:id', upload.single('image'), (req, res) => {
+    app.put('/products/:id', s3Controller.upload.single('image'), (req, res) => {
 
         //pone al producto como dispoble = false, luego crea uno igual con los cambios realizados
         const now = new Date().toISOString();
@@ -170,7 +146,7 @@ module.exports = function (app) {
             Body: req.file.buffer
         }
 
-        s3.upload(params, (error, data) => {
+        s3Controller.s3.upload(params, (error, data) => {
             if (error) {
                 res.status(500).json({
                     success: false,

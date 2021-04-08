@@ -2,64 +2,12 @@ const User = require('../models/user');
 const Cart = require('../models/cart');
 const Order = require('../models/order');
 const Product = require('../models/product');
-const AWS = require('aws-sdk');
-const nodemailer = require('nodemailer');
 const Supplier = require('../models/supplier');
 const HelpProyect = require('../models/helpProyect');
 const Direction = require('../models/direction');
-
-const SES_CONFIG = {
-    accessKeyId: 'AKIA3WGAH3552HY4WGUD',
-    secretAccessKey: '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',
-    region: 'us-east-1',
-};
-
-const AWS_SES = new AWS.SES(SES_CONFIG);
+const MailController = require('./mailController');
 
 let orderModel = {};
-
-let sendEmail = (recipientEmail, name) => {
-    //sendEmail("Cristopher.lizandro.11@gmail.com", "test Compralocal");
-
-    let params = {
-        Source: 'admin@compralocal.pe',
-        Destination: {
-            ToAddresses: [
-                recipientEmail
-            ],
-        },
-        ReplyToAddresses: [],
-        Message: {
-            Body: {
-                Html: {
-                    Charset: 'UTF-8',
-                    Data: 'This is the body <br> of my email!',
-                },
-            },
-            Subject: {
-                Charset: 'UTF-8',
-                Data: `Hola, ${name}!`,
-            }
-        },
-    };
-    return AWS_SES.sendEmail(params).promise();
-};
-
-let sendTemplateEmail = (data) => {
-    // console.log(sendTemplateEmail("Cristopher.lizandro.11@gmail.com"));
-    
-    let params = {
-        Source: 'Admin Compralocal <admin@compralocal.pe>',
-        Template: data.template,
-        Destination: {
-            ToAddresses: [
-                data.sendMail
-            ]
-        },
-        TemplateData: JSON.stringify(data)
-    };
-    return AWS_SES.sendTemplatedEmail(params).promise();
-};
 
 orderModel.getAll = (callback) => {
     Order.findAll({
@@ -180,7 +128,7 @@ orderModel.sendUserMail = async (data, callback) => {
     } else {
         data.pagado = false;
     }
-    sendTemplateEmail(data).then(res => {
+    MailController.sendTemplateEmail(data).then(res => {
         callback(null, res);
     });
 }
@@ -206,7 +154,7 @@ orderModel.sendAdminMail = async (data, callback) => {
         element.supplierPrice = Math.round((element.supplierPrice) * 100) / 100;
     });
 
-    sendTemplateEmail(data).then(res => {
+    MailController.sendTemplateEmail(data).then(res => {
         callback(null, res);
     });
 }
@@ -229,7 +177,7 @@ orderModel.sendPagoPendienteMail = async (data, callback) => {
         data.paymentMethodString = 'YAPE';
         data.paymentAccount = '973-853-443';
     }
-    sendTemplateEmail(data).then(res => {
+    MailController.sendTemplateEmail(data).then(res => {
         callback(null, res);
     });
 }
@@ -238,7 +186,7 @@ orderModel.sendThanksUserMail = async (data, callback) => {
     // console.log("dataUser", data);
     data.template = "CLMailThanksUserTemplate";
     data.sendMail = data.user.email;
-    sendTemplateEmail(data).then(res => {
+    MailController.sendTemplateEmail(data).then(res => {
         callback(null, res);
     });
 }
@@ -253,7 +201,7 @@ orderModel.sendNewSuppMail = async (data, callback) => {
         contact_person: data.contact_person
     }
     // console.log(dataSend);
-    sendTemplateEmail(dataSend).then(res => {
+    MailController.sendTemplateEmail(dataSend).then(res => {
         callback(null, res);
     });
 }

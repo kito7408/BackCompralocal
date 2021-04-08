@@ -1,18 +1,5 @@
 const Supplier = require('../controllers/supplierController');
-const multer = require('multer');
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3({
-    accessKeyId: 'AKIA3WGAH3554DJMT2ZM',
-    secretAccessKey: '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'
-});
-
-const storage = multer.memoryStorage({
-    destination: function (req, file, callback) {
-        callback(null, '')
-    }
-});
-
-const upload = multer({ storage: storage });
+const s3Controller = require('../controllers/s3Controller');
 
 module.exports = function (app) {
 
@@ -40,7 +27,7 @@ module.exports = function (app) {
         })
     });
 
-    app.post('/suppliers', upload.array('image'), async (req, res) => {
+    app.post('/suppliers', s3Controller.upload.array('image'), async (req, res) => {
         var pathImgs = [];
 
         if (req.files) {
@@ -60,7 +47,7 @@ module.exports = function (app) {
                     Body: element.buffer
                 }
 
-                s3.upload(params, (error, data) => {
+                s3Controller.s3.upload(params, (error, data) => {
                     if (error) {
                         res.status(500).json({
                             success: false,
@@ -119,7 +106,7 @@ module.exports = function (app) {
         });
     });
 
-    app.put('/suppliers/:id', upload.array('image'), async (req, res) => {
+    app.put('/suppliers/:id', s3Controller.upload.array('image'), async (req, res) => {
         var img1 = '';
         var img2 = '';
 
@@ -146,7 +133,7 @@ module.exports = function (app) {
                     Body: element.buffer
                 }
 
-                s3.upload(params, (error, data) => {
+                s3Controller.s3.upload(params, (error, data) => {
                     if (error) {
                         res.status(500).json({
                             success: false,

@@ -1,46 +1,13 @@
-const AWS = require('aws-sdk');
-
-const SES_CONFIG = {
-    accessKeyId: 'AKIA3WGAH3552HY4WGUD',
-    secretAccessKey: '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',
-    region: 'us-east-1',
-};
-
-const AWS_SES = new AWS.SES(SES_CONFIG);
+const MailController = require('./mailController');
 
 let culqiEventsFunctions = {};
-
-let sendEmail = (sendToEmail, subject, message) => {
-    let params = {
-        Source: 'admin@compralocal.pe',
-        Destination: {
-            ToAddresses: [
-                sendToEmail
-            ],
-        },
-        ReplyToAddresses: [],
-        Message: {
-            Body: {
-                Html: {
-                    Charset: 'UTF-8',
-                    Data: `${message}`,
-                },
-            },
-            Subject: {
-                Charset: 'UTF-8',
-                Data: `${subject}`,
-            }
-        },
-    };
-    return AWS_SES.sendEmail(params).promise();
-};
 
 culqiEventsFunctions.detectEvent = (data, callback) => {
 
     var dataStr = JSON.stringify(data);
     var mailDest = 'compralocal@compralocal.pe';
     var subject = '';
-    var message = `La información retornada por culqi es: 
+    var message = `La información retornada por culqi es: \n
     ${dataStr}
     `;
     var sendMail = false;
@@ -121,7 +88,7 @@ culqiEventsFunctions.detectEvent = (data, callback) => {
     }
 
     if (sendMail) {
-        sendEmail(mailDest, subject, message).then(res => {
+        MailController.sendEmail(mailDest, subject, message).then(res => {
             callback();
         });
     } else {
