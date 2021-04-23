@@ -92,7 +92,10 @@ module.exports = function (app) {
             image2: pathImgs[1],
             image3: pathImgs[2],
             image4: pathImgs[3],
-            image5: pathImgs[4]
+            image5: pathImgs[4],
+            toProv: req.body.toProv,
+            daysToSend: req.body.daysToSend,
+            numDaysToSend: req.body.numDaysToSend
         };
 
         Product.insert(productData, (err, data) => {
@@ -167,7 +170,10 @@ module.exports = function (app) {
                 supplierId: req.body.supplierId,
                 isOffer: req.body.isOffer,
                 priceOffer: req.body.priceOffer,
-                unit: req.body.unit
+                unit: req.body.unit,
+                toProv: req.body.toProv,
+                daysToSend: req.body.daysToSend,
+                numDaysToSend: req.body.numDaysToSend
             };
             Product.update(productData, (err, data) => {
                 if (data) {

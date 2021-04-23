@@ -4,6 +4,7 @@ var Category = require('./category');
 // var SubCategory = require('./subCategory');
 var Supplier = require('./supplier');
 var ProductModel = require('./productModel');
+var DeliveryZone = require('./deliveryZone');
 
 const Product = connection.define('product', {
 	name: {
@@ -60,10 +61,22 @@ const Product = connection.define('product', {
 		type: Sequelize.STRING,
 		allowNull: false
 	},
+	toProv:{
+		type: Sequelize.BOOLEAN,
+		allowNull: false
+	},
 	available: {
 		type: Sequelize.BOOLEAN,
 		allowNull: false
-	}
+	},
+    daysToSend: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
+    numDaysToSend: {
+		type: Sequelize.DOUBLE,
+		allowNull: false
+	},
 });
 
 Product.belongsTo(Category, {
@@ -80,5 +93,6 @@ Product.belongsTo(Supplier, {
 });
 
 Product.hasMany(ProductModel);
+Product.hasMany(DeliveryZone);
 
 module.exports = Product;

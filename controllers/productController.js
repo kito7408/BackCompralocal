@@ -6,6 +6,7 @@ const Category = require('../models/category');
 const Supplier = require('../models/supplier');
 const Cart = require('../models/cart');
 const ProdMod = require('../models/productModel');
+const DelZone = require('../models/deliveryZone');
 
 let productModel = {};
 
@@ -20,7 +21,7 @@ productModel.getAll = (callback) => {
             where: {
                 available: true
             }
-        }, ProdMod],
+        }, ProdMod, DelZone],
         where: {
             available: true
         },
@@ -31,6 +32,9 @@ productModel.getAll = (callback) => {
 };
 
 productModel.insert = (data, callback) => {
+    if (data.toProv == 'undefined') {
+        data.toProv = false;
+    }
     if (data.isOffer == 'undefined') {
         data.isOffer = false;
     }
@@ -57,7 +61,10 @@ productModel.insert = (data, callback) => {
         image3: data.image3,
         image4: data.image4,
         image5: data.image5,
-        available: true
+        toProv: data.toProv,
+        available: true,
+        daysToSend: data.daysToSend,
+        numDaysToSend: data.numDaysToSend
     }).then(result => {
         callback(null, result.get());
     });
@@ -103,7 +110,10 @@ productModel.update = (data, callback) => {
                 isOffer: data.isOffer,
                 priceOffer: data.priceOffer,
                 unit: data.unit,
-                available: true
+                toProv: data.toProv,
+                available: true,
+                daysToSend: data.daysToSend,
+                numDaysToSend: data.numDaysToSend
             }).then(result => {
                 callback(null, result.get());
             });
@@ -149,7 +159,7 @@ productModel.findById = (id, callback) => {
             where: {
                 available: true
             }
-        }, ProdMod],
+        }, ProdMod, DelZone],
         where: {
             id: id,
             available: true
@@ -173,7 +183,7 @@ productModel.findByCategory = (id, callback) => {
             where: {
                 available: true
             }
-        }, ProdMod],
+        }, ProdMod, DelZone],
         where: {
             categoryId: id,
             available: true
@@ -220,7 +230,7 @@ productModel.findBySupplier = (id, callback) => {
             where: {
                 available: true
             }
-        }, ProdMod],
+        }, ProdMod, DelZone],
         where: {
             supplierId: id,
             available: true
@@ -244,7 +254,7 @@ productModel.findBySearch = (searchText, callback) => {
             where: {
                 available: true
             }
-        }, ProdMod],
+        }, ProdMod, DelZone],
         where: {
             name: {
                 [Op.like]: '%' + searchText + '%'
@@ -270,7 +280,7 @@ productModel.sortByBuys = (callback) => {
             where: {
                 available: true
             }
-        }, ProdMod],
+        }, ProdMod, DelZone],
         where: {
             available: true
         },

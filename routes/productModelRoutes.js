@@ -1,20 +1,5 @@
 const ProdMod = require('../controllers/productModelController');
-const multer = require('multer');
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3({
-    accessKeyId: 'AKIA3WGAH3554DJMT2ZM',
-    secretAccessKey: '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'
-});
-
-
-const storage = multer.memoryStorage({
-    destination: function (req, file, callback) {
-        callback(null, '')
-    }
-});
-
-const upload = multer({ storage: storage });
-
+const s3Controller = require('../controllers/s3Controller');
 
 module.exports = function (app) {
 
@@ -36,7 +21,7 @@ module.exports = function (app) {
         })
     });
 
-    app.post('/prodmodel', upload.single('image'), (req, res) => {
+    app.post('/prodmodel', s3Controller.upload.single('image'), (req, res) => {
         
         const now = new Date().toISOString();
         const date = now.replace(/:/g, '-');
@@ -48,7 +33,7 @@ module.exports = function (app) {
             Body: req.file.buffer
         }
 
-        s3.upload(params, (error, data) => {
+        s3Controller.s3.upload(params, (error, data) => {
             if(error){
                 res.status(500).json({
                     success: false,
@@ -80,28 +65,6 @@ module.exports = function (app) {
                 }
             });
         });
-    });
-
-    app.post('/prodmodel/many', (req, res) => {
-
-        console.log("llega", req.body);
-        const dataArray = req.body;
-
-        ProdMod.saveMany(dataArray, (err, data) => {
-            if (data) {
-                res.json({
-                    success: true,
-                    msg: 'Models Inserted',
-                    data: data
-                })
-            } else {
-                res.status(500).json({
-                    success: false,
-                    msg: 'Error',
-                    err: err
-                })
-            }
-        })
     });
 
     app.put('/prodmodel/:id', (req, res) => {

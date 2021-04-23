@@ -64,10 +64,4 @@ prodModModel.findByProduct = (product_id, callback) => {
     });
 }
 
-prodModModel.saveMany = async (dataArray, callback) => {
-    ProdMod.bulkCreate(dataArray).then(result => {
-        callback(null, result);
-    });
-}
-
 module.exports = prodModModel;
