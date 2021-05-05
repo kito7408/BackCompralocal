@@ -118,6 +118,41 @@ module.exports = function (app) {
         })
     });
 
+    app.put('/deliveryzone/updateFromProd/:id', (req, res) => {
+
+        const dataArray = req.body;
+
+        dataArray.forEach(item => {
+            var districtsString = '';
+
+            for (let index = 0; index < item.districts.length; index++) {
+                if (index == 0) {
+                    districtsString += item.districts[index];
+                } else {
+                    districtsString += (',' + item.districts[index]);
+                }
+            }
+
+            item.districts = districtsString;
+        });
+
+        DeliveryZone.updateFromProd(dataArray, req.params.id, (err, result) => {
+            if (result) {
+                res.json({
+                    success: true,
+                    msg: 'DeliveryZone from prod Updated',
+                    data: result
+                });
+            } else {
+                res.json({
+                    success: false,
+                    msg: 'error',
+                    err: err
+                })
+            }
+        })
+    });
+
     app.delete('/deliveryzone/:id', (req, res) => {
         DeliveryZone.delete(req.params.id, (err, data) => {
             if (data) {

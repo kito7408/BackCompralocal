@@ -39,7 +39,9 @@ module.exports = function (app) {
             isBuyed: req.body.isBuyed,
             userId: req.body.userId,
             productId: req.body.productId,
-            orderId: req.body.orderId
+            orderId: req.body.orderId,
+            comment: req.body.comment,
+            productModelId: req.body.productModelId
         };
 
         Cart.insert(cartData, (err, data) => {
@@ -81,7 +83,7 @@ module.exports = function (app) {
     });
 
     app.put('/cart/:id', (req, res) => {
-        console.log(req.body)
+        // console.log(req.body)
         const cartData = {
             id: req.body.id,
             quantity: req.body.quantity,
@@ -89,7 +91,9 @@ module.exports = function (app) {
             isBuyed: req.body.isBuyed,
             userId: req.body.userId,
             productId: req.body.productId,
-            orderId: req.body.orderId
+            orderId: req.body.orderId,
+            comment: req.body.comment,
+            productModelId: req.body.productModelId
         };
 
         Cart.update(cartData, (err, data) => {

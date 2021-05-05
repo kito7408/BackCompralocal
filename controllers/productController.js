@@ -27,24 +27,16 @@ productModel.getAll = (callback) => {
         },
         order: Sequelize.literal('rand()')
     }).then(result => {
+        result.forEach(element => {
+            for (let index = 0; index < element.deliveryZones.length; index++) {
+                element.deliveryZones[index].districts = element.deliveryZones[index].districts.split(',');
+            }
+        });
         callback(null, result);
     });
 };
 
 productModel.insert = (data, callback) => {
-    if (data.toProv == 'undefined') {
-        data.toProv = false;
-    }
-    if (data.isOffer == 'undefined') {
-        data.isOffer = false;
-    }
-    if (data.priceOffer == 'undefined') {
-        data.priceOffer = '0';
-    }
-    if (data.description == 'undefined') {
-        data.description = null;
-    }
-    // console.log(data);
     Product.create({
         name: data.name,
         description: data.description,
@@ -64,60 +56,52 @@ productModel.insert = (data, callback) => {
         toProv: data.toProv,
         available: true,
         daysToSend: data.daysToSend,
-        numDaysToSend: data.numDaysToSend
+        numDaysToSend: data.numDaysToSend,
+        numDaysToSend2: data.numDaysToSend2
     }).then(result => {
         callback(null, result.get());
     });
 };
 
 productModel.update = (data, callback) => {
-    // Product.findOne({
-    //     where: {
-    //         id: data.id
-    //     }
-    // }).then(obj => {
-    //     obj.name = data.name;
-    //     obj.description = data.description;
-    //     obj.price = data.price;
-    //     obj.image = data.image;
-    //     obj.numSellOnWeek = data.numSellOnWeek;
-    //     obj.isTrent = data.isTrent;
-    //     obj.categoryId = data.categoryId;
-    //     obj.subCategoryId = data.subCategoryId;
-    //     obj.supplierId = data.supplierId;
-    //     obj.isOffer = data.isOffer;
-    //     obj.priceOffer = data.priceOffer;
-    //     obj.unit = data.unit;
-    //     obj.save().then(result => callback(null, result.get()));
-    // });
-
     Product.findOne({
         where: {
             id: data.id
         }
     }).then(obj => {
-        obj.available = false;
-        obj.save().then(res => {
-            Product.create({
-                name: data.name,
-                description: data.description,
-                price: data.price,
-                image: data.image,
-                numSellOnWeek: data.numSellOnWeek,
-                isTrent: data.isTrent,
-                categoryId: data.categoryId,
-                supplierId: data.supplierId,
-                isOffer: data.isOffer,
-                priceOffer: data.priceOffer,
-                unit: data.unit,
-                toProv: data.toProv,
-                available: true,
-                daysToSend: data.daysToSend,
-                numDaysToSend: data.numDaysToSend
-            }).then(result => {
-                callback(null, result.get());
-            });
-        });
+        obj.name = data.name;
+        obj.description = data.description;
+        obj.price = data.price;
+        obj.numSellOnWeek = data.numSellOnWeek,
+            obj.isTrent = data.isTrent;
+        obj.categoryId = data.categoryId;
+        obj.supplierId = data.supplierId;
+        obj.isOffer = data.isOffer;
+        obj.priceOffer = data.priceOffer;
+        obj.unit = data.unit;
+        obj.toProv = data.toProv;
+        obj.available = true;
+        obj.daysToSend = data.daysToSend;
+        obj.numDaysToSend = data.numDaysToSend;
+        obj.numDaysToSend = data.numDaysToSend;
+
+        if (data.image1 != '') {
+            obj.image1 = data.image1;
+        }
+        if (data.image2 != '') {
+            obj.image2 = data.image2;
+        }
+        if (data.image3 != '') {
+            obj.image3 = data.image3;
+        }
+        if (data.image4 != '') {
+            obj.image4 = data.image4;
+        }
+        if (data.image5 != '') {
+            obj.image5 = data.image5;
+        }
+
+        obj.save().then(result => callback(null, result.get()));
     });
 };
 
@@ -153,7 +137,7 @@ productModel.findById = (id, callback) => {
         include: [{
             model: Category,
             as: 'category'
-        }, 
+        },
         {
             model: Supplier,
             where: {
@@ -168,6 +152,11 @@ productModel.findById = (id, callback) => {
             ['id', 'DESC']
         ]
     }).then(result => {
+        if (result) {
+            for (let index = 0; index < result.deliveryZones.length; index++) {
+                result.deliveryZones[index].districts = result.deliveryZones[index].districts.split(',');
+            }
+        }
         callback(null, result);
     });
 };
@@ -192,6 +181,11 @@ productModel.findByCategory = (id, callback) => {
             ['id', 'DESC']
         ]
     }).then(result => {
+        result.forEach(element => {
+            for (let index = 0; index < element.deliveryZones.length; index++) {
+                element.deliveryZones[index].districts = element.deliveryZones[index].districts.split(',');
+            }
+        });
         callback(null, result);
     });
 }
@@ -239,6 +233,11 @@ productModel.findBySupplier = (id, callback) => {
             ['id', 'DESC']
         ]
     }).then(result => {
+        result.forEach(element => {
+            for (let index = 0; index < element.deliveryZones.length; index++) {
+                element.deliveryZones[index].districts = element.deliveryZones[index].districts.split(',');
+            }
+        });
         callback(null, result);
     });
 }
@@ -265,6 +264,11 @@ productModel.findBySearch = (searchText, callback) => {
             ['id', 'DESC']
         ]
     }).then(result => {
+        result.forEach(element => {
+            for (let index = 0; index < element.deliveryZones.length; index++) {
+                element.deliveryZones[index].districts = element.deliveryZones[index].districts.split(',');
+            }
+        });
         callback(null, result);
     });
 }
@@ -288,6 +292,11 @@ productModel.sortByBuys = (callback) => {
             ['numSellOnWeek', 'DESC']
         ]
     }).then(result => {
+        result.forEach(element => {
+            for (let index = 0; index < element.deliveryZones.length; index++) {
+                element.deliveryZones[index].districts = element.deliveryZones[index].districts.split(',');
+            }
+        });
         callback(null, result);
     });
 }

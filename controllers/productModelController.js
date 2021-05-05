@@ -44,6 +44,20 @@ prodModModel.delete = (id, callback) => {
     });
 };
 
+prodModModel.deleteAllFromProd = (id, callback) => {
+    ProdMod.findAll({
+        where: {
+            productId: id
+        }
+    }).then(async objs => {
+        await objs.forEach(element => {
+            element.destroy();
+        });
+
+        callback(null, "eliminados todos from prod");
+    });
+};
+
 prodModModel.findById = (id, callback) => {
     ProdMod.findOne({
         where: {

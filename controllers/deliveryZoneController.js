@@ -31,6 +31,26 @@ delZoneModel.update = (data, callback) => {
     });
 };
 
+delZoneModel.updateFromProd = (dataArray, prodId, callback) => {
+    DeliveryZone.findAll({
+        where: {
+            productId: prodId
+        }
+    }).then(async result => {
+        await result.forEach(element => {
+            element.destroy();
+        });
+
+        if (dataArray.length > 0) {
+            DeliveryZone.bulkCreate(dataArray).then(res => {
+                callback(null, res);
+            });
+        } else {
+            callback(null, "ahora el producto no tiene modelos");
+        }
+    });
+}
+
 delZoneModel.delete = (id, callback) => {
     DeliveryZone.findOne({
         where: {

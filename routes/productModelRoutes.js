@@ -23,32 +23,53 @@ module.exports = function (app) {
 
     app.post('/prodmodel', s3Controller.upload.single('image'), (req, res) => {
         
-        const now = new Date().toISOString();
-        const date = now.replace(/:/g, '-');
-        const filename = date + req.file.originalname;
+        const prodModData = {
+            name: req.body.name,
+            image: '',
+            prodImgNum: req.body.prodImgNum,
+            productId: req.body.productId
+        };
 
-        var params = {
-            Bucket: 'compralocal-images/product-models',
-            Key: filename,
-            Body: req.file.buffer
-        }
-
-        s3Controller.s3.upload(params, (error, data) => {
-            if(error){
-                res.status(500).json({
-                    success: false,
-                    msg: 'Error',
-                    err: error
-                })
+        if (req.file) {
+            const now = new Date().toISOString();
+            const date = now.replace(/:/g, '-');
+            const filename = date + req.file.originalname;
+    
+            var params = {
+                Bucket: 'compralocal-images/product-models',
+                Key: filename,
+                Body: req.file.buffer
             }
-
-            const prodModData = {
-                name: req.body.name,
-                image: filename,
-                prodImgNum: req.body.prodImgNum,
-                productId: req.body.productId
-            };
-
+    
+            s3Controller.s3.upload(params, (error, data) => {
+                if(error){
+                    res.status(500).json({
+                        success: false,
+                        msg: 'Error',
+                        err: error
+                    })
+                }
+    
+                prodModData.image = filename;
+    
+                ProdMod.insert(prodModData, (err, data) => {
+                    if (data) {
+                        res.json({
+                            success: true,
+                            msg: 'ProdMod Inserted',
+                            data: data
+                        })
+                    } else {
+                        res.status(500).json({
+                            success: false,
+                            msg: 'Error',
+                            err: err
+                        })
+                    }
+                });
+            });
+        } else {
+            prodModData.image = req.body.image;
             ProdMod.insert(prodModData, (err, data) => {
                 if (data) {
                     res.json({
@@ -64,7 +85,8 @@ module.exports = function (app) {
                     })
                 }
             });
-        });
+        }
+
     });
 
     app.put('/prodmodel/:id', (req, res) => {
@@ -94,6 +116,23 @@ module.exports = function (app) {
 
     app.delete('/prodmodel/:id', (req, res) => {
         ProdMod.delete(req.params.id, (err, data) => {
+            if (data) {
+                res.json({
+                    success: true,
+                    dataDeleted: data
+                })
+            } else {
+                res.json({
+                    success: false,
+                    msg: 'Error',
+                    err: err
+                })
+            }
+        })
+    });
+
+    app.delete('/prodmodel/allFromProd/:id', (req, res) => {
+        ProdMod.deleteAllFromProd(req.params.id, (err, data) => {
             if (data) {
                 res.json({
                     success: true,

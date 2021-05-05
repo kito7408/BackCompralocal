@@ -77,6 +77,10 @@ const Product = connection.define('product', {
 		type: Sequelize.DOUBLE,
 		allowNull: false
 	},
+    numDaysToSend2: {
+		type: Sequelize.DOUBLE,
+		allowNull: false
+	},
 });
 
 Product.belongsTo(Category, {

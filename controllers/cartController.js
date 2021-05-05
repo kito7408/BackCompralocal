@@ -1,6 +1,9 @@
 const Product = require('../models/product');
 const User = require('../models/user');
 const Cart = require('../models/cart');
+const Supplier = require('../models/supplier');
+const ProdMod = require('../models/productModel');
+const DelZone = require('../models/deliveryZone');
 const fetch = require('node-fetch');
 var Sequelize = require('sequelize');
 var Op = Sequelize.Op;
@@ -11,11 +14,26 @@ let cartModel = {};
 
 cartModel.getAll = (callback) => {
     Cart.findAll({
-        include: [Product, User],
+        include: [User, ProdMod,
+            {
+                model: Product,
+                where: {
+                    available: true
+                },
+                include: [DelZone,
+                    {
+                        model: Supplier,
+                        where: {
+                            available: true
+                        }
+                    }
+                ]
+            }],
         where: {
             isBuyed: false
         }
     }).then(data => {
+        console.log(data);
         callback(null, data);
     });
 };
@@ -39,7 +57,9 @@ cartModel.insert = (data, callback) => {
                 isBuyed: data.isBuyed,
                 userId: data.userId,
                 productId: data.productId,
-                orderId: data.orderId
+                orderId: data.orderId,
+                comment: data.comment,
+                productModelId: data.productModelId
             }).then(result => {
                 callback(null, result.get());
             });
@@ -59,6 +79,8 @@ cartModel.update = (data, callback) => {
         obj.userId = data.userId;
         obj.productId = data.productId;
         obj.orderId = data.orderId;
+        obj.comment = data.comment;
+        obj.productModelId = data.productModelId;
         obj.save().then(result => callback(null, result.get()));
     });
 };
@@ -75,10 +97,25 @@ cartModel.delete = (id, callback) => {
 
 cartModel.findById = (id, callback) => {
     Cart.findOne({
+        include: [User, ProdMod,
+            {
+                model: Product,
+                where: {
+                    available: true
+                },
+                include: [DelZone,
+                    {
+                        model: Supplier,
+                        where: {
+                            available: true
+                        }
+                    }
+                ]
+            }],
         where: {
+            isBuyed: false,
             id: id
-        },
-        include: [Product, User]
+        }
     }).then(result => {
         callback(null, result);
     });
@@ -86,11 +123,25 @@ cartModel.findById = (id, callback) => {
 
 cartModel.findByUser = (id, callback) => {
     Cart.findAll({
+        include: [User, ProdMod,
+            {
+                model: Product,
+                where: {
+                    available: true
+                },
+                include: [DelZone,
+                    {
+                        model: Supplier,
+                        where: {
+                            available: true
+                        }
+                    }
+                ]
+            }],
         where: {
-            userId: id,
-            isBuyed: false
-        },
-        include: [Product, User]
+            isBuyed: false,
+            userId: id
+        }
     }).then(result => {
         callback(null, result);
     });
@@ -98,12 +149,27 @@ cartModel.findByUser = (id, callback) => {
 
 cartModel.findWhereIsInAnyOrder = (callback) => {
     Cart.findAll({
+        include: [User, ProdMod,
+            {
+                model: Product,
+                where: {
+                    available: true
+                },
+                include: [DelZone,
+                    {
+                        model: Supplier,
+                        where: {
+                            available: true
+                        }
+                    }
+                ]
+            }],
         where: {
+            isBuyed: false,
             orderId: {
                 [Op.notLike]: null
             }
-        },
-        include: [Product, User]
+        }
     }).then(result => {
         callback(null, result);
     });
@@ -111,10 +177,25 @@ cartModel.findWhereIsInAnyOrder = (callback) => {
 
 cartModel.findByOrder = (id, callback) => {
     Cart.findAll({
+        include: [User, ProdMod,
+            {
+                model: Product,
+                where: {
+                    available: true
+                },
+                include: [DelZone,
+                    {
+                        model: Supplier,
+                        where: {
+                            available: true
+                        }
+                    }
+                ]
+            }],
         where: {
+            isBuyed: false,
             orderId: id
-        },
-        include: [Product, User]
+        }
     }).then(result => {
         callback(null, result);
     });
@@ -139,11 +220,11 @@ cartModel.saveMany = async (cartArray, callback) => {
                 } else {
                     cartNoRepeat.push(element);
                 }
-                if (index === array.length -1) resolve();
+                if (index === array.length - 1) resolve();
             });
         });
     });
-    
+
     bar.then(() => {
         if (cartNoRepeat.length > 0) {
             Cart.bulkCreate(cartNoRepeat).then(() => {
@@ -159,12 +240,26 @@ cartModel.saveMany = async (cartArray, callback) => {
             });
         } else {
             Cart.findAll({
-                where: {
-                    userId: cartArray[0].userId,
-                    isBuyed: false
-                },
-                include: [Product, User]
-            }).then(result => {
+                    include: [User,
+                        {
+                            model: Product,
+                            where: {
+                                available: true
+                            },
+                            include: [DelZone,
+                                {
+                                    model: Supplier,
+                                    where: {
+                                        available: true
+                                    }
+                                }
+                            ]
+                        }],
+                    where: {
+                        userId: cartArray[0].userId,
+                        isBuyed: false
+                    }
+                }).then(result => {
                 callback(null, result);
             });
         }
@@ -173,6 +268,21 @@ cartModel.saveMany = async (cartArray, callback) => {
 
 cartModel.buyCart = (user_id, order_id, callback) => {  //convierte todos los items en el carrito de un usuario (que esten con isBuyed = false) en isBuyed = true, tambien se le asigna una orden
     Cart.findAll({
+        include: [User, ProdMod,
+            {
+                model: Product,
+                where: {
+                    available: true
+                },
+                include: [DelZone,
+                    {
+                        model: Supplier,
+                        where: {
+                            available: true
+                        }
+                    }
+                ]
+            }],
         where: {
             userId: user_id,
             isBuyed: false

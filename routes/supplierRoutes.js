@@ -110,7 +110,7 @@ module.exports = function (app) {
         var img1 = '';
         var img2 = '';
 
-        if (req.files && (req.body.changeImg1 || req.body.changeImg2)) {
+        if (req.files && (req.body.changeImg1 == 'true' || req.body.changeImg2 == 'true')) {
             const now = new Date().toISOString();
             const date = now.replace(/:/g, '-');
             // filename = date + req.file.originalname;

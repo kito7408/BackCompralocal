@@ -50,7 +50,6 @@ module.exports = function (app) {
 
         const now = new Date().toISOString();
         const date = now.replace(/:/g, '-');
-        // const filename = date + req.file.originalname;
 
         const prodImages = req.files;
 
@@ -77,6 +76,31 @@ module.exports = function (app) {
             });
         });
 
+        //can be null
+        if (req.body.priceOffer == 'undefined') {
+            req.body.priceOffer = '0';
+        }
+        if (req.body.description == 'undefined') {
+            req.body.description = null;
+        }
+
+        //boolean
+        if (req.body.isTrent == 'true') {
+            req.body.isTrent = true;
+        } else {
+            req.body.isTrent = false;
+        }
+        if (req.body.isOffer == 'true') {
+            req.body.isOffer = true;
+        } else {
+            req.body.isOffer = false;
+        }
+        if (req.body.toProv == 'true') {
+            req.body.toProv = true;
+        } else {
+            req.body.toProv = false;
+        }
+
         const productData = {
             name: req.body.name,
             description: req.body.description,
@@ -95,7 +119,8 @@ module.exports = function (app) {
             image5: pathImgs[4],
             toProv: req.body.toProv,
             daysToSend: req.body.daysToSend,
-            numDaysToSend: req.body.numDaysToSend
+            numDaysToSend: req.body.numDaysToSend,
+            numDaysToSend2: req.body.numDaysToSend2
         };
 
         Product.insert(productData, (err, data) => {
@@ -136,93 +161,126 @@ module.exports = function (app) {
         })
     });
 
-    app.put('/products/:id', s3Controller.upload.single('image'), (req, res) => {
+    app.put('/products/:id', s3Controller.upload.array('image'), async (req, res) => {
 
-        //pone al producto como dispoble = false, luego crea uno igual con los cambios realizados
-        const now = new Date().toISOString();
-        const date = now.replace(/:/g, '-');
-        const filename = date + req.file.originalname;
+        // console.log(req.files);
+        // console.log(req.body);
 
-        var params = {
-            Bucket: 'compralocal-images/products',
-            Key: filename,
-            Body: req.file.buffer
+        var img1 = '';
+        var img2 = '';
+        var img3 = '';
+        var img4 = '';
+        var img5 = '';
+
+        if (req.files &&
+            (req.body.changeImg1 == 'true' ||
+                req.body.changeImg2 == 'true' ||
+                req.body.changeImg3 == 'true' ||
+                req.body.changeImg4 == 'true' ||
+                req.body.changeImg5 == 'true')) {
+            const now = new Date().toISOString();
+            const date = now.replace(/:/g, '-');
+
+            const prodImages = req.files;
+
+            await prodImages.forEach(element => {
+
+                const filename = date + element.originalname;
+
+                if (req.body.changeImg1 == 'true' && img1 == '') {
+                    img1 = filename;
+                } else if (req.body.changeImg2 == 'true' && img2 == '') {
+                    img2 = filename;
+                } else if (req.body.changeImg3 == 'true' && img3 == '') {
+                    img3 = filename;
+                } else if (req.body.changeImg4 == 'true' && img4 == '') {
+                    img4 = filename;
+                } else if (req.body.changeImg5 == 'true' && img5 == '') {
+                    img5 = filename;
+                }
+
+                var params = {
+                    Bucket: 'compralocal-images/products',
+                    Key: filename,
+                    Body: element.buffer
+                }
+
+                s3Controller.s3.upload(params, (error, data) => {
+                    if (error) {
+                        res.status(500).json({
+                            success: false,
+                            msg: 'Error',
+                            err: error
+                        })
+                    }
+                });
+            });
         }
 
-        s3Controller.s3.upload(params, (error, data) => {
-            if (error) {
+        //can be null
+        if (req.body.priceOffer == 'undefined') {
+            req.body.priceOffer = '0';
+        }
+        if (req.body.description == 'undefined') {
+            req.body.description = null;
+        }
+
+        //boolean
+        if (req.body.isTrent == 'true') {
+            req.body.isTrent = true;
+        } else {
+            req.body.isTrent = false;
+        }
+        if (req.body.isOffer == 'true') {
+            req.body.isOffer = true;
+        } else {
+            req.body.isOffer = false;
+        }
+        if (req.body.toProv == 'true') {
+            req.body.toProv = true;
+        } else {
+            req.body.toProv = false;
+        }
+
+        const productData = {
+            id: req.body.id,
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            numSellOnWeek: req.body.numSellOnWeek,
+            isTrent: req.body.isTrent,
+            categoryId: req.body.categoryId,
+            supplierId: req.body.supplierId,
+            isOffer: req.body.isOffer,
+            priceOffer: req.body.priceOffer,
+            unit: req.body.unit,
+            image1: img1,
+            image2: img2,
+            image3: img3,
+            image4: img4,
+            image5: img5,
+            toProv: req.body.toProv,
+            daysToSend: req.body.daysToSend,
+            numDaysToSend: req.body.numDaysToSend,
+            numDaysToSend2: req.body.numDaysToSend2
+        };
+
+        Product.update(productData, (err, data) => {
+            if (data) {
+                res.json({
+                    success: true,
+                    msg: 'Product Updated',
+                    data: data
+                })
+            } else {
                 res.status(500).json({
                     success: false,
                     msg: 'Error',
-                    err: error
+                    err: err
                 })
             }
-
-            const productData = {
-                id: req.body.id,
-                name: req.body.name,
-                description: req.body.description,
-                price: req.body.price,
-                image: filename,
-                numSellOnWeek: req.body.numSellOnWeek,
-                isTrent: req.body.isTrent,
-                categoryId: req.body.categoryId,
-                supplierId: req.body.supplierId,
-                isOffer: req.body.isOffer,
-                priceOffer: req.body.priceOffer,
-                unit: req.body.unit,
-                toProv: req.body.toProv,
-                daysToSend: req.body.daysToSend,
-                numDaysToSend: req.body.numDaysToSend
-            };
-            Product.update(productData, (err, data) => {
-                if (data) {
-                    res.json({
-                        success: true,
-                        msg: 'Product Updated',
-                        data: data
-                    })
-                } else {
-                    res.status(500).json({
-                        success: false,
-                        msg: 'Error',
-                        err: err
-                    })
-                }
-            })
         });
 
-        // const productData = {
-        //     id: req.body.id,
-        //     name: req.body.name,
-        //     description: req.body.description,
-        //     price: req.body.price,
-        //     image: req.file.path,
-        //     numSellOnWeek: req.body.numSellOnWeek,
-        //     isTrent: req.body.isTrent,
-        //     categoryId: req.body.categoryId,
-        //     subcategoryId: req.body.subcategoryId,
-        //     supplierId: req.body.supplierId,
-        //     isOffer: req.body.isOffer,
-        //     priceOffer: req.body.priceOffer,
-        //     unit: req.body.unit
-        // };
-
-        // Product.update(productData, (err, data) => {
-        //     if (data) {
-        //         res.json({
-        //             success: true,
-        //             msg: 'Product Updated',
-        //             data: data
-        //         });
-        //     } else {
-        //         res.json({
-        //             success: false,
-        //             msg: 'error',
-        //             err: err
-        //         })
-        //     }
-        // });
     });
 
     app.delete('/products/:id', (req, res) => {
