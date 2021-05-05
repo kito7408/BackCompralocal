@@ -94,6 +94,10 @@
             margin: 0%;
         }
 
+        .w-40{
+            width: 40%;
+        }
+
         @media (min-width: 576px) {
 
             .container,
@@ -184,6 +188,7 @@
                 <tr>
                     <th scope="col">Cantidad</th>
                     <th scope="col">Producto</th>
+                    <th scope="col" class="w-40">Delivery</th>
                     <th scope="col">Precio</th>
                     <th scope="col">Subtotal</th>
                 </tr>
@@ -193,22 +198,27 @@
                 <tr>
                     <td class="align-middle">{{quantity}}</td>
                     <td class="align-middle">
-                        {{product.name}}
+                        <div>
+                            {{product.name}} <br> <a href="https://compralocal.pe/products/{{product.id}}">detalle</a>
+                        </div>
+                    </td>
+                    <td>
+                        Recíbelo entre el {{fecha_entrega}} y el {{fecha_entrega2}} en {{direction.distrito}}
                     </td>
                     <td class="align-middle">{{product.price}}</td>
                     <td class="align-middle">{{totalPrice}}</td>
                 </tr>
                 {{/each}}
                 <tr>
-                    <th scope="row" colspan="3">Total Productos</th>
+                    <th scope="row" colspan="4">Total Productos</th>
                     <th>{{productsPrice}}</th>
                 </tr>
                 <tr>
-                    <th scope="row" colspan="3">Total Envío</th>
+                    <th scope="row" colspan="4">Total Envío</th>
                     <th>{{deliveryPrice}}</th>
                 </tr>
                 <tr>
-                    <th scope="row" colspan="3">Importe total de la compra</th>
+                    <th scope="row" colspan="4">Importe total de la compra</th>
                     <th>{{totalPrice}}</th>
                 </tr>
             </tbody>
