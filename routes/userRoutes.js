@@ -148,4 +148,42 @@ module.exports = function (app) {
             }
         })
     });
+
+    app.post('/users/newpass-step1', (req, res) => {
+
+        User.newPassStep1(req.body.email, (err, data) => {
+            if (data) {
+                res.json({
+                    success: true,
+                    msg: 'Email send',
+                    data: data
+                })
+            } else {
+                res.status(500).json({
+                    success: false,
+                    msg: 'Error',
+                    err: err
+                })
+            }
+        })
+    });
+
+    app.post('/users/newpass-step2', (req, res) => {
+
+        User.newPassStep2(req.body.data, req.body.newPass, (err, data) => {
+            if (data) {
+                res.json({
+                    success: true,
+                    msg: 'Contraseña actualizada',
+                    data: data
+                })
+            } else {
+                res.status(500).json({
+                    success: false,
+                    msg: 'Error',
+                    err: err
+                })
+            }
+        })
+    });
 }

@@ -1,0 +1,219 @@
+<head>
+    <style>
+        .table-bordered {
+            border: 1px solid #dee2e6;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        .table .thead-light th {
+            color: #495057;
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+        }
+
+        .table-bordered thead td,
+        .table-bordered thead th {
+            border-bottom-width: 2px;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table-bordered td,
+        .table-bordered th {
+            border: 1px solid #dee2e6;
+        }
+
+        .table td,
+        .table th {
+            padding: .75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        th {
+            text-align: inherit;
+            text-align: -webkit-match-parent;
+        }
+
+        .align-middle {
+            vertical-align: middle !important;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif !important;
+        }
+
+        .container,
+        .container-fluid,
+        .container-lg,
+        .container-md,
+        .container-sm,
+        .container-xl {
+            width: 100%;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .img-logo {
+            width: 100%;
+            border-bottom: solid 4px black;
+            margin-bottom: 1rem;
+            background-color: #688052;
+        }
+
+        .text-success {
+            color: #28a745 !important;
+        }
+
+        .text-danger {
+            color: #dc3545 !important;
+        }
+
+        .cuadro {
+            padding: 1rem;
+            border: 2px solid black;
+            background-color: #e9e9e9;
+            margin-bottom: 2rem;
+        }
+
+        .cuadro>h3 {
+            margin: 0%;
+        }
+
+        .btn {
+            display: inline-block;
+            cursor: pointer;
+            font-weight: 400;
+            color: #212529;
+            text-align: center;
+            vertical-align: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: transparent;
+            border: 1px solid transparent;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: .25rem;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .btn:hover {
+            color: #212529;
+            text-decoration: none;
+        }
+
+        .btn-info {
+            color: #fff;
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .btn-info:hover {
+            color: #fff;
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
+        .text-center{
+            text-align: center;
+        }
+
+        @media (min-width: 576px) {
+
+            .container,
+            .container-sm {
+                max-width: 540px;
+            }
+
+            .contenedor {
+                width: 100%;
+            }
+
+            .cuadro {
+                width: 80%;
+            }
+        }
+
+        @media (min-width: 768px) {
+
+            .container,
+            .container-md,
+            .container-sm {
+                max-width: 720px;
+            }
+        }
+
+        @media (min-width: 992px) {
+
+            .container,
+            .container-lg,
+            .container-md,
+            .container-sm {
+                max-width: 960px;
+            }
+
+            .contenedor {
+                width: 80%;
+            }
+
+            .cuadro {
+                width: 70%;
+            }
+        }
+
+        @media (min-width: 1200px) {
+
+            .container,
+            .container-lg,
+            .container-md,
+            .container-sm,
+            .container-xl {
+                max-width: 1140px;
+            }
+
+            .contenedor {
+                width: 50%;
+            }
+
+            .cuadro {
+                width: 40%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container contenedor">
+        <a href="https://compralocal.pe/">
+            <img src="https://compralocal.pe/assets/imgs/logo_new_blanco.png" alt="CompraLocal" class="img-logo">
+        </a>
+        <h1>Hola {{user}}</h1>
+        <p class="text-center">
+            En el sistema de CompraLocal se ha indicado que has olvidado tu contraseña.<br>
+            Para poder cambiar la contraseña de tu cuenta y puedas acceder al sistema, ingresa al siguiente link:<br>
+            <a href="https://compralocal.pe/home/{{token}}">Link</a><br><br>
+        </p>
+
+        <p class="text-danger text-center">
+            En caso <b>tu no hayas realizado esta solicitud</b> de cambio de contraseña<br>
+            puede que alguien este intentando acceder a tu cuenta sin tu consentimiento.
+        </p>
+    </div>
+</body>

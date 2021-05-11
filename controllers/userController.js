@@ -4,6 +4,7 @@ const UserType = require('../models/userType');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const CONFIG = require('../config/config');
+const MailController = require('./mailController');
 
 let userModel = {};
 
@@ -93,27 +94,27 @@ userModel.findByEmail = (email, callback) => {
 
 userModel.login = (userData, callback) => {
     User.findOne({
-        where:{
+        where: {
             email: userData.email
             // password: userData.password
         },
         include: [UserType, Direction]
     }).then(user => {
         // console.log(userData);
-        bcrypt.compare(userData.password, user.dataValues.password, function(err, match) {
+        bcrypt.compare(userData.password, user.dataValues.password, function (err, match) {
             // result == true
             if (match) {
-                jwt.sign(user.dataValues,CONFIG.SECRET_TOKEN, function(error, token) {
+                jwt.sign(user.dataValues, CONFIG.SECRET_TOKEN, function (error, token) {
                     if (error) {
                         console.log(error);
                         callback(error);
                     } else {
-                        callback(null, {user, token});
+                        callback(null, { user, token });
                     }
                 });
             } else {
                 console.log(err);
-                callback(err); 
+                callback(err);
             }
         });
     });
@@ -122,20 +123,62 @@ userModel.login = (userData, callback) => {
 
 userModel.loginSocialMedia = (email, callback) => {
     User.findOne({
-        where:{
+        where: {
             email: email
         },
         include: [UserType, Direction]
     }).then(user => {
         console.log(user);
-        jwt.sign(user.dataValues,CONFIG.SECRET_TOKEN, function(error, token) {
+        jwt.sign(user.dataValues, CONFIG.SECRET_TOKEN, function (error, token) {
             if (error) {
                 console.log(error);
                 callback(error);
             } else {
-                callback(null, {user, token});
+                callback(null, { user, token });
             }
         });
+    });
+}
+
+userModel.newPassStep1 = (email, callback) => {
+    User.findOne({
+        where: {
+            email: email
+        },
+        include: [UserType, Direction]
+    }).then(user => {
+
+        var tokenURL = Buffer.from(user.dataValues.name + '-/' + email + '-/' + user.dataValues.docNum + '-/' + user.dataValues.password).toString('base64');
+
+        dataSend = {
+            template: "CLMailNewPassTemplate",
+            sendMail: email,
+            token: tokenURL,
+            user: user.dataValues.name
+        }
+
+        MailController.sendTemplateEmail(dataSend).then(res => {
+            callback(null, res);
+        });
+    });
+}
+
+userModel.newPassStep2 = (data, newPass, callback) => {
+    User.findOne({
+        where: {
+            name: data.name,
+            email: data.email,
+            docNum: data.dni,
+            password: data.pass
+        },
+        include: [UserType, Direction]
+    }).then(user => {
+        if (user) {
+            user.password = newPass;
+            user.save().then(result => callback(null, result.get()));
+        } else {
+            callback("el usuario no se ha encontrado");
+        }
     });
 }
 
