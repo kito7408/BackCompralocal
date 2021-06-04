@@ -5,6 +5,14 @@ const HelpProyect = connection.define('helpproyect', {
 	name: {
 		type: Sequelize.STRING,
 		allowNull: false
+	},
+	num: {
+		type: Sequelize.DOUBLE,
+		allowNull: false
+	},
+	money: {
+		type: Sequelize.DOUBLE,
+		allowNull: false
 	}
 });
 

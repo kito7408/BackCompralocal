@@ -16,7 +16,9 @@ module.exports = function (app) {
 
     app.post('/helpproy', (req, res) => {
         const helpData = {
-            name: req.body.name
+            name: req.body.name,
+            num: req.body.num,
+            money: req.body.money
         };
         HelpProyect.insert(helpData, (err, data) => {
             if (data) {
@@ -39,7 +41,9 @@ module.exports = function (app) {
 
         const helpData = {
             id: req.body.id,
-            name: req.body.name
+            name: req.body.name,
+            num: req.body.num,
+            money: req.body.money
         };
 
         HelpProyect.update(helpData, (err, data) => {
