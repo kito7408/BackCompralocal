@@ -36,7 +36,7 @@ app.use(bodyParser.json());
 require('./routes/userRoutes')(app);
 require('./routes/userTypeRoutes')(app);
 require('./routes/categoryRoutes')(app);
-// require('./routes/subCategoryRoutes')(app);
+require('./routes/subCategoryRoutes')(app);
 require('./routes/productRoutes')(app);
 require('./routes/cartRoutes')(app);
 require('./routes/postRoutes')(app);

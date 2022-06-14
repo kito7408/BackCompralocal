@@ -100,23 +100,27 @@ userModel.login = (userData, callback) => {
         },
         include: [UserType, Direction]
     }).then(user => {
-        // console.log(userData);
-        bcrypt.compare(userData.password, user.dataValues.password, function (err, match) {
-            // result == true
-            if (match) {
-                jwt.sign(user.dataValues, CONFIG.SECRET_TOKEN, function (error, token) {
-                    if (error) {
-                        console.log(error);
-                        callback(error);
-                    } else {
-                        callback(null, { user, token });
-                    }
-                });
-            } else {
-                console.log(err);
-                callback(err);
-            }
-        });
+        if (user) {
+            bcrypt.compare(userData.password, user.dataValues.password, function (err, match) {
+                // result == true
+                if (match) {
+                    jwt.sign(user.dataValues, CONFIG.SECRET_TOKEN, function (error, token) {
+                        if (error) {
+                            callback(error);
+                        } else {
+                            callback(null, { user, token });
+                        }
+                    });
+                } else {
+                    console.log(err);
+                    callback(err);
+                }
+            });
+        } else {
+            callback("no existe usuario con ese correo");
+        }
+    }, error => {
+        callback(error);
     });
 }
 

@@ -1,7 +1,7 @@
 var Sequelize = require('sequelize');
 var connection = require('../connection');
 var Category = require('./category');
-// var SubCategory = require('./subCategory');
+var SubCategory = require('./subCategory');
 var Supplier = require('./supplier');
 var ProductModel = require('./productModel');
 var DeliveryZone = require('./deliveryZone');
@@ -88,6 +88,13 @@ Product.belongsTo(Category, {
 		allowNull: false
 	},
 	as: 'category'
+});
+
+Product.belongsTo(SubCategory, {
+	foreignKey: {
+		allowNull: false
+	},
+	as: 'subcategory'
 });
 
 Product.belongsTo(Supplier, {

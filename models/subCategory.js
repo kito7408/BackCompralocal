@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 var connection = require('../connection');
-// var Category = require('./category');
+var Category = require('./category');
 
 const SubCategory = connection.define('subcategory', {
 	name: {
@@ -12,8 +12,7 @@ const SubCategory = connection.define('subcategory', {
 // SubCategory.belongsTo(Category, {
 // 	foreignKey: {
 // 		allowNull: false
-// 	},
-// 	as: 'category'
+// 	}
 // });
 
 module.exports = SubCategory;

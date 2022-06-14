@@ -24,15 +24,11 @@ const User = connection.define('user', {
 	},
 	docType: {
 		type: Sequelize.STRING,
-		allowNull: false
+		allowNull: true
 	},
 	docNum: {
 		type: Sequelize.STRING,
-		allowNull: false
-	},
-	docType: {
-		type: Sequelize.STRING,
-		allowNull: false
+		allowNull: true
 	},
 	phoneFijo: {
 		type: Sequelize.STRING,
@@ -40,7 +36,7 @@ const User = connection.define('user', {
 	},
 	phoneMovil: {
 		type: Sequelize.STRING,
-		allowNull: false
+		allowNull: true
 	},
 });
 

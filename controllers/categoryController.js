@@ -1,10 +1,15 @@
 const Category = require('../models/category');
-// const SubCategory = require('../models/subCategory');
+const SubCategory = require('../models/subCategory');
 
 let categoryModel = {};
 
 categoryModel.getAll = (callback) => {
-    Category.findAll().then(result => {
+    Category.findAll({
+        include: [{
+            model: SubCategory,
+            as: 'subcategories'
+        }]
+    }).then(result => {
         callback(null, result);
     });
 };
@@ -40,6 +45,10 @@ categoryModel.delete = (id, callback) => {
 
 categoryModel.findById = (id, callback) => {
     Category.findOne({
+        include: [{
+            model: SubCategory,
+            as: 'subcategories'
+        }],
         where: {
             id: id
         }

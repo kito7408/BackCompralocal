@@ -7,6 +7,7 @@ const Supplier = require('../models/supplier');
 const Cart = require('../models/cart');
 const ProdMod = require('../models/productModel');
 const DelZone = require('../models/deliveryZone');
+const SubCategory = require('../models/subCategory');
 
 let productModel = {};
 
@@ -15,6 +16,10 @@ productModel.getAll = (callback) => {
         include: [{
             model: Category,
             as: 'category'
+        },
+        {
+            model: SubCategory,
+            as: 'subcategory'
         },
         {
             model: Supplier,
@@ -44,6 +49,7 @@ productModel.insert = (data, callback) => {
         numSellOnWeek: data.numSellOnWeek,
         isTrent: data.isTrent,
         categoryId: data.categoryId,
+        subcategoryId: data.subcategoryId,
         supplierId: data.supplierId,
         isOffer: data.isOffer,
         priceOffer: data.priceOffer,
@@ -72,9 +78,10 @@ productModel.update = (data, callback) => {
         obj.name = data.name;
         obj.description = data.description;
         obj.price = data.price;
-        obj.numSellOnWeek = data.numSellOnWeek,
-            obj.isTrent = data.isTrent;
+        obj.numSellOnWeek = data.numSellOnWeek;
+        obj.isTrent = data.isTrent;
         obj.categoryId = data.categoryId;
+        obj.subcategoryId = data.subcategoryId;
         obj.supplierId = data.supplierId;
         obj.isOffer = data.isOffer;
         obj.priceOffer = data.priceOffer;
@@ -139,6 +146,10 @@ productModel.findById = (id, callback) => {
             as: 'category'
         },
         {
+            model: SubCategory,
+            as: 'subcategory'
+        },
+        {
             model: Supplier,
             where: {
                 available: true
@@ -168,6 +179,10 @@ productModel.findByCategory = (id, callback) => {
             as: 'category'
         },
         {
+            model: SubCategory,
+            as: 'subcategory'
+        },
+        {
             model: Supplier,
             where: {
                 available: true
@@ -190,34 +205,43 @@ productModel.findByCategory = (id, callback) => {
     });
 }
 
-// productModel.findBySubCategory = (id, callback) => {
-//     Product.findAll({
-//         include: [{
-//             model: Category,
-//             as: 'category'
-//         },
-//         {
-//             model: SubCategory,
-//             as: 'subcategory'
-//         },
-//             Supplier],
-//         where: {
-//             subCategoryId: id,
-//             available: true
-//         },
-//         order: [
-//             ['id', 'DESC']
-//         ]
-//     }).then(result => {
-//         callback(null, result);
-//     });
-// }
+productModel.findBySubCategory = (id, callback) => {
+    Product.findAll({
+        include: [{
+            model: Category,
+            as: 'category'
+        },
+        {
+            model: SubCategory,
+            as: 'subcategory'
+        },
+        {
+            model: Supplier,
+            where: {
+                available: true
+            }
+        }, ProdMod, DelZone],
+        where: {
+            subCategoryId: id,
+            available: true
+        },
+        order: [
+            ['id', 'DESC']
+        ]
+    }).then(result => {
+        callback(null, result);
+    });
+}
 
 productModel.findBySupplier = (id, callback) => {
     Product.findAll({
         include: [{
             model: Category,
             as: 'category'
+        },
+        {
+            model: SubCategory,
+            as: 'subcategory'
         },
         {
             model: Supplier,
@@ -249,6 +273,10 @@ productModel.findBySearch = (searchText, callback) => {
             as: 'category'
         },
         {
+            model: SubCategory,
+            as: 'subcategory'
+        },
+        {
             model: Supplier,
             where: {
                 available: true
@@ -278,6 +306,10 @@ productModel.sortByBuys = (callback) => {
         include: [{
             model: Category,
             as: 'category'
+        },
+        {
+            model: SubCategory,
+            as: 'subcategory'
         },
         {
             model: Supplier,

@@ -15,11 +15,11 @@ module.exports = function (app) {
         });
     });
 
-    // app.get('/products/subcategory/:id', (req, res) => {
-    //     Product.findBySubCategory(req.params.id, (err, data) => {
-    //         res.json(data);
-    //     });
-    // });
+    app.get('/products/subcategory/:id', (req, res) => {
+        Product.findBySubCategory(req.params.id, (err, data) => {
+            res.json(data);
+        });
+    });
 
     app.get('/products/supplier/:id', (req, res) => {
         Product.findBySupplier(req.params.id, (err, data) => {
@@ -46,10 +46,12 @@ module.exports = function (app) {
     });
 
     app.post('/products', s3Controller.upload.array('image'), async (req, res) => {
-        // console.log(req.files);
+        // console.log("files",req.files);
+        // console.log("body",req.body);
 
         const now = new Date().toISOString();
-        const date = now.replace(/:/g, '-');
+        const date1 = now.replace(/:/g, '-');
+        const date = date1.replace(/\./g,'-');
 
         const prodImages = req.files;
 
@@ -108,6 +110,7 @@ module.exports = function (app) {
             numSellOnWeek: req.body.numSellOnWeek,
             isTrent: req.body.isTrent,
             categoryId: req.body.categoryId,
+            subcategoryId: req.body.subcategoryId,
             supplierId: req.body.supplierId,
             isOffer: req.body.isOffer,
             priceOffer: req.body.priceOffer,
@@ -122,6 +125,8 @@ module.exports = function (app) {
             numDaysToSend: req.body.numDaysToSend,
             numDaysToSend2: req.body.numDaysToSend2
         };
+
+        // console.log("data", productData);
 
         Product.insert(productData, (err, data) => {
             if (data) {
